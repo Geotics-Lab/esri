@@ -17,6 +17,7 @@ define(["dojo/_base/declare",
 	"dojo/_base/lang",
 	"dojo/on",
 	"esri/layers/WebTiledLayer",
+	"esri/layers/FeatureLayer",
 	"esri/geometry/Extent",
 	"esri/SpatialReference",
 	"esri/tasks/QueryTask",
@@ -25,7 +26,7 @@ define(["dojo/_base/declare",
 	"dijit/_WidgetsInTemplateMixin",
 	"dojo/_base/array"
 ],
-	function (declare, lang, on, WebTiledLayer, Extent, SpatialReference, QueryTask, Query, BaseWidget, _WidgetsInTemplateMixin, array) {
+	function (declare, lang, on, WebTiledLayer, FeatureLayer, Extent, SpatialReference, QueryTask, Query, BaseWidget, _WidgetsInTemplateMixin, array) {
 		return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
 			name: "AddData",
@@ -186,30 +187,26 @@ define(["dojo/_base/declare",
 						name: "test"
 					}
 
-					var mapLayers = this.map._layers
 
 
-					for (const key in mapLayers) {
+					for (const key in self.config.layers) {
 
-						const layer = mapLayers[key];
+						const layer = self.config.layers[key];
+						
 						console.log(layer)
 
-						if (layer.url != null) {
+						allFeaturesPromise.push(self.getAllLayerFeatures(layer.url))
 
-							if (layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
-								console.info(layer)
-								allFeaturesPromise.push(self.getAllLayerFeatures(layer))
+						Promise.all(allFeaturesPromise).then(function (values) {
 
-								Promise.all(allFeaturesPromise).then(function (values) {
+							values.forEach(value => {
+								console.log(value)
+							});
 
-									values.forEach(value => {
-										console.log(value)
-									});
+						})
 
-								})
-							}
 
-						}
+
 
 					}
 					console.warn(this.map)
@@ -225,11 +222,12 @@ define(["dojo/_base/declare",
 			},
 
 
-			getAllLayerFeatures: function (layer) {
+
+			getAllLayerFeatures: function (url) {
 
 				return new Promise((resolve, reject) => {
 
-					queryTask = new QueryTask(layer.url);
+					queryTask = new QueryTask(url);
 
 
 					query = new Query();
