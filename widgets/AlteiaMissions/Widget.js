@@ -192,8 +192,9 @@ define(["dojo/_base/declare",
 					for (const key in mapLayers) {
 
 						const layer = mapLayers[key];
+						console.log(layer)
 
-						if (layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
+						if (layer.url && layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
 							console.info(layer)
 							allFeaturesPromise.push(self.getAllLayerFeatures(layer))
 
