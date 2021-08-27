@@ -218,17 +218,18 @@ define(["dojo/_base/declare",
 
 							});
 
+
+							resolve(description)
+
 						})
 
 
 
 
 					}
-					console.warn(this.map)
+					
 
-					description.push(template)
-
-					resolve(description)
+					
 
 
 
