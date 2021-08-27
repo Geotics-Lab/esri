@@ -192,7 +192,7 @@ define(["dojo/_base/declare",
 					for (const key in self.config.layers) {
 
 						const layer = self.config.layers[key];
-						
+
 						console.log(layer)
 
 						allFeaturesPromise.push(self.getAllLayerFeatures(layer.url))
@@ -225,7 +225,17 @@ define(["dojo/_base/declare",
 
 			getAllLayerFeatures: function (url) {
 
+				var self = this
+
 				return new Promise((resolve, reject) => {
+
+					
+					for (var index = 0; index < self.config.layers.length; index++) {
+						const element = array[index];
+						if (url == element.url) {
+							break
+						}
+					}
 
 					queryTask = new QueryTask(url);
 
@@ -234,9 +244,12 @@ define(["dojo/_base/declare",
 					query.returnGeometry = false;
 					query.outFields = ["*"];
 
-					queryTask.execute(query, function (features) {
+					queryTask.execute(query, function (results) {
 
-						resolve(features)
+						resolve({
+							index: index,
+							features: results.features
+						})
 
 					});
 
