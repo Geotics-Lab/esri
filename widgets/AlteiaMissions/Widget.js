@@ -201,6 +201,12 @@ define(["dojo/_base/declare",
 
 							values.forEach(value => {
 								console.log(value)
+
+								value.features.forEach(feature => {
+									console.log(feature.attributes[self.config.layers[value.index].surveyNameField])
+								});
+
+
 							});
 
 						})
