@@ -183,6 +183,8 @@ define(["dojo/_base/declare",
 							name : "test"
 						}
 
+						console.warn(this.map)
+
 						description.push(template)
 
 						resolve(description)
