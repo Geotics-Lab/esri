@@ -231,7 +231,7 @@ define(["dojo/_base/declare",
 
 					
 					for (var index = 0; index < self.config.layers.length; index++) {
-						const element = array[index];
+						const element = self.config.layers[index];
 						if (url == element.url) {
 							break
 						}
