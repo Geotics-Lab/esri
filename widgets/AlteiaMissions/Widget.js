@@ -19,11 +19,13 @@ define(["dojo/_base/declare",
 	"esri/layers/WebTiledLayer",
 	"esri/geometry/Extent",
 	"esri/SpatialReference",
+	"esri/tasks/QueryTask",
+	"esri/tasks/query",
 	"jimu/BaseWidget",
 	"dijit/_WidgetsInTemplateMixin",
 	"dojo/_base/array"
 ],
-	function (declare, lang, on, WebTiledLayer, Extent, SpatialReference, BaseWidget, _WidgetsInTemplateMixin, array) {
+	function (declare, lang, on, WebTiledLayer, Extent, SpatialReference, QueryTask, Query, BaseWidget, _WidgetsInTemplateMixin, array) {
 		return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
 			name: "AddData",
@@ -46,7 +48,7 @@ define(["dojo/_base/declare",
 
 				this.host = this.config.host
 
-			
+
 
 				self.getMissionsDescription().then(function (description) {
 					self.missionsDescription = description
@@ -55,7 +57,7 @@ define(["dojo/_base/declare",
 
 				this["mission-selector"].onchange = function (e) {
 
-					self.surveyDescription  = JSON.parse(this.getAttribute("survey-description"))
+					self.surveyDescription = JSON.parse(this.getAttribute("survey-description"))
 					self.clearTiledLayer()
 					self.addTiledLayer(self.surveyDescription)
 
@@ -82,7 +84,7 @@ define(["dojo/_base/declare",
 
 			},
 
-		
+
 
 			addMissions: function (description) {
 
@@ -118,15 +120,15 @@ define(["dojo/_base/declare",
 				this.map.addLayer(this.webTiledLayer);
 				console.log(description)
 
-			/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
-				var extent = new Extent();
-				extent.xmin = description.real_bbox.bbox[0];
-				extent.ymin = description.real_bbox.bbox[1];
-				extent.xmax = description.real_bbox.bbox[2];
-				extent.ymax = description.real_bbox.bbox[3];
-				extent.spatialReference = spatialRef;
-
-				this.map.setExtent(extent); */
+				/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
+					var extent = new Extent();
+					extent.xmin = description.real_bbox.bbox[0];
+					extent.ymin = description.real_bbox.bbox[1];
+					extent.xmax = description.real_bbox.bbox[2];
+					extent.ymax = description.real_bbox.bbox[3];
+					extent.spatialReference = spatialRef;
+	
+					this.map.setExtent(extent); */
 
 			},
 
@@ -175,34 +177,66 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
-						var description = []
+					var description = []
+					var allFeaturesPromise = []
 
-						var template = {
-							url : "test",
-							date : "test",
-							name : "test"
-						}
+					var template = {
+						url: "test",
+						date: "test",
+						name: "test"
+					}
 
-						var mapLayers = this.map._layers
+					var mapLayers = this.map._layers
 
 
-						for (const key in mapLayers) {
+					for (const key in mapLayers) {
 
-								const layer = mapLayers[key];
+						const layer = mapLayers[key];
 
-								if (layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
-									console.info(layer)
-								}
+						if (layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
+							console.info(layer)
+							allFeaturesPromise.push(self.getAllLayerFeatures(layer))
+
+							allFeaturesPromise.then(function (values) {
+
+								values.forEach(value => {
+									console.log(value)
+								});
 								
-							
+							})
 						}
-						console.warn(this.map)
 
-						description.push(template)
 
-						resolve(description)
+					}
+					console.warn(this.map)
 
-					
+					description.push(template)
+
+					resolve(description)
+
+
+
+				})
+
+			},
+
+
+			getAllLayerFeatures: function (layer) {
+
+				return new Promise((resolve, reject) => {
+
+					queryTask = new QueryTask(layer.url);
+
+
+					query = new Query();
+					query.returnGeometry = false;
+					query.outFields = ["*"];
+
+					queryTask.execute(query, function (features) {
+
+						resolve(features)
+
+					});
 
 				})
 
