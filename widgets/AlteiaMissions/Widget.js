@@ -34,7 +34,8 @@ define(["dojo/_base/declare",
       },
 
       startup: function() {
-		  
+		
+		 console.log("missions")
 		 console.log(this)
 		 var self = this
 		 this.selectedProject = null
