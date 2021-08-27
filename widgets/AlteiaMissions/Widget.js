@@ -194,19 +194,22 @@ define(["dojo/_base/declare",
 						const layer = mapLayers[key];
 						console.log(layer)
 
-						if (layer.url && layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
-							console.info(layer)
-							allFeaturesPromise.push(self.getAllLayerFeatures(layer))
+						if (layer.url != null) {
 
-							allFeaturesPromise.then(function (values) {
+							if (layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
+								console.info(layer)
+								allFeaturesPromise.push(self.getAllLayerFeatures(layer))
 
-								values.forEach(value => {
-									console.log(value)
-								});
-								
-							})
+								allFeaturesPromise.then(function (values) {
+
+									values.forEach(value => {
+										console.log(value)
+									});
+
+								})
+							}
+
 						}
-
 
 					}
 					console.warn(this.map)
