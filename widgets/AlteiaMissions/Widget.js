@@ -200,7 +200,7 @@ define(["dojo/_base/declare",
 								console.info(layer)
 								allFeaturesPromise.push(self.getAllLayerFeatures(layer))
 
-								allFeaturesPromise.then(function (values) {
+								Promise.all(allFeaturesPromise).then(function (values) {
 
 									values.forEach(value => {
 										console.log(value)
