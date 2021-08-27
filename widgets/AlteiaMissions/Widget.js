@@ -183,6 +183,19 @@ define(["dojo/_base/declare",
 							name : "test"
 						}
 
+						var mapLayers = this.map._layers
+
+
+						for (const key in mapLayers) {
+
+								const layer = mapLayers[key];
+
+								if (layer.url.startsWith("https://gis-dv1.eramet.com/server/rest/services/00-POC/")) {
+									console.info(layer)
+								}
+								
+							
+						}
 						console.warn(this.map)
 
 						description.push(template)
