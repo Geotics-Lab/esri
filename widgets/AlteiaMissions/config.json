@@ -2,21 +2,21 @@
   "layers": [
     {
       "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_DroneLandMarks/FeatureServer/0",
-      "surveyTileField": "survey_tiles",
-      "surveyNameField": "survey_lib",
-      "surveyDateField" : "survey_date"
+      "surveyTileField": "surv_tiles",
+      "surveyNameField": "surv_lib",
+      "surveyDateField" : "surv_date"
     },
     {
       "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_ContouringVillages/FeatureServer/0",
-      "surveyTileField": "survey_tiles",
-      "surveyNameField": "survey_lib",
-      "surveyDateField" : "survey_date"
+      "surveyTileField": "surv_tiles",
+      "surveyNameField": "surv_lib",
+      "surveyDateField" : "surv_date"
     },
     {
       "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_ContouringFields/FeatureServer/0",
-      "surveyTileField": "survey_tiles",
-      "surveyNameField": "survey_lib",
-      "surveyDateField" : "survey_date"
+      "surveyTileField": "surv_tiles",
+      "surveyNameField": "surv_lib",
+      "surveyDateField" : "surv_date"
     }
   ]
 }
