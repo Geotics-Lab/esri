@@ -123,7 +123,7 @@ define(["dojo/_base/declare",
 
 			addTiledLayer: function (description) {
 
-				var tilesUrl = description.url.replace("{z}", "{level}").replace("{y}", "{col}").replace("{x}", "{row}")
+				var tilesUrl = description.url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
 
 				console.log("add ", tilesUrl)
 				this.webTiledLayer = new WebTiledLayer(tilesUrl, {
@@ -159,6 +159,7 @@ define(["dojo/_base/declare",
 
 					if (layersUrl.includes(layer.url)) {
 						console.log("layer = ", layer)
+						console.log(this.config.surveyNameField + " = '" + description.name + "'")
 						layer.setDefinitionExpression(this.config.surveyNameField + " = '" + description.name + "'")
 					}
 
@@ -307,6 +308,30 @@ define(["dojo/_base/declare",
 
 				})
 
+			},
+
+			executeIfLayersLoaded : function (callback) {
+
+				var toCheckLayers = []
+				var checkedLayers = 0
+
+				this.config.layers.forEach(element => {
+					layersUrl.push(element.url)
+				});
+
+
+				this.map._layers.forEach(layer => {
+
+					if (layersUrl.includes(layer.url)) {
+						checkedLayers ++
+						if (toCheckLayers.length == checkedLayers) {
+							callback()
+							break
+						}
+					}
+
+				});
+				
 			}
 
 
