@@ -260,7 +260,10 @@ define(["dojo/_base/declare",
 					query.returnGeometry = false;
 					query.outFields = ["*"];
 
+					console.info(query)
+
 					queryTask.execute(query, function (results) {
+						console.log("result", results)
 
 						resolve({
 							index: index,
