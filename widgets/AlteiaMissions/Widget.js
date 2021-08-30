@@ -138,7 +138,7 @@ define(["dojo/_base/declare",
 
 			},
 
-			setLayersDifinitionExpression : function (description) {
+			setLayersDifinitionExpression: function (description) {
 
 				var layersUrl = []
 
@@ -148,13 +148,13 @@ define(["dojo/_base/declare",
 
 
 				this.map._layers.forEach(layer => {
-					
+
 					if (layersUrl.includes(layer.url)) {
 						console.log("layer = ", layer)
 					}
 
 				});
-				
+
 			},
 
 			clearTiledLayer: function () {
@@ -245,7 +245,7 @@ define(["dojo/_base/declare",
 
 						});
 
-
+						console.warn(description)
 						resolve(description)
 
 					})
@@ -264,7 +264,7 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
-			
+
 					function onResults(results) {
 						console.log("result", results)
 
@@ -291,7 +291,7 @@ define(["dojo/_base/declare",
 					query.outFields = ["*"];
 					query.where = "1=1";
 
-					console.info(query,queryTask)
+					console.info(query, queryTask)
 
 					queryTask.execute(query, onResults);
 
