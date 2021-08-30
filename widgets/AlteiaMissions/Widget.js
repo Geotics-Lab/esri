@@ -61,8 +61,8 @@ define(["dojo/_base/declare",
 				})
 
 				this["mission-selector"].onchange = function (e) {
-
-					self.surveyDescription = JSON.parse(this.getAttribute("survey-description"))
+					console.log(this)
+					self.surveyDescription = self.missionsDescription[this.value]
 					self.clearTiledLayer()
 					console.info(self.surveyDescription)
 					self.addTiledLayer(self.surveyDescription)
@@ -96,15 +96,19 @@ define(["dojo/_base/declare",
 
 				var self = this
 
+				var i = 0
+
 				description.forEach(element => {
 
 					if (this.dateFilterIsValid(new Date(element.date))) {
 						var option = document.createElement('option')
 
 						option.innerHTML = element.name
+						option.value = i
 						option.setAttribute("survey-description", JSON.stringify(element))
 
 						self["mission-selector"].appendChild(option)
+						i++
 					}
 
 
