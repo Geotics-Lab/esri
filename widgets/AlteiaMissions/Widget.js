@@ -64,6 +64,7 @@ define(["dojo/_base/declare",
 
 					self.surveyDescription = JSON.parse(this.getAttribute("survey-description"))
 					self.clearTiledLayer()
+					console.info(self.surveyDescription)
 					self.addTiledLayer(self.surveyDescription)
 
 				}
