@@ -256,7 +256,7 @@ define(["dojo/_base/declare",
 					query.returnGeometry = false;
 					query.outFields = ["*"];
 
-					console.info(query)
+					console.info(query,queryTask)
 
 					queryTask.execute(query, function (results) {
 						console.log("result", results)
