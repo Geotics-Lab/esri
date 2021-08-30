@@ -38,6 +38,10 @@ define(["dojo/_base/declare",
 
 			startup: function () {
 
+				this.map.on('load', function (e) {
+					console.warn("mapload")
+				})
+
 				console.log("missions")
 				console.log(this)
 				var self = this
