@@ -280,7 +280,6 @@ define(["dojo/_base/declare",
 
 
 					function onResults(results) {
-						console.log("result", results)
 
 						resolve({
 							index: index,
@@ -305,7 +304,6 @@ define(["dojo/_base/declare",
 					query.outFields = ["*"];
 					query.where = "1=1";
 
-					console.info(query, queryTask)
 
 					queryTask.execute(query, onResults);
 
@@ -330,7 +328,6 @@ define(["dojo/_base/declare",
 						checkedLayers ++
 						if (toCheckLayers.length == checkedLayers) {
 							callback()
-							break
 						}
 					}
 
