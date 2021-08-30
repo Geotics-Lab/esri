@@ -241,6 +241,16 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
+					function onResults(results) {
+						console.log("result", results)
+
+						resolve({
+							index: index,
+							features: results.features
+						})
+
+					}
+
 
 					for (var index = 0; index < self.config.layers.length; index++) {
 						const element = self.config.layers[index];
@@ -253,20 +263,13 @@ define(["dojo/_base/declare",
 
 
 					query = new Query();
-					query.returnGeometry = false;
-					query.outFields = ["*"];
+					//query.returnGeometry = false;
+					//query.outFields = ["*"];
 
 					console.info(query,queryTask)
 
-					queryTask.execute(query, function (results) {
-						console.log("result", results)
+					queryTask.execute(query, onResults);
 
-						resolve({
-							index: index,
-							features: results.features
-						})
-
-					});
 
 				})
 
