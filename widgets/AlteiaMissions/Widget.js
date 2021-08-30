@@ -249,7 +249,7 @@ define(["dojo/_base/declare",
 								template.name = feature.attributes[self.config.layers[value.index].surveyNameField]
 								template.date = feature.attributes[self.config.layers[value.index].surveyDateField]
 								template.url = feature.attributes[self.config.layers[value.index].surveyTileField]
-
+console.log(uniqueMissionList, template.name)
 								if (uniqueMissionList.includes(template.name) == false) {
 									uniqueMissionList.push(template.name)
 									description.push(template)
