@@ -154,8 +154,12 @@ define(["dojo/_base/declare",
 					layersUrl.push(element.url)
 				});
 
+				console.info(layersUrl)
+
 
 				this.map._layers.forEach(layer => {
+
+					console.info(layer.url)
 
 					if (layersUrl.includes(layer.url)) {
 						console.log("layer = ", layer)
