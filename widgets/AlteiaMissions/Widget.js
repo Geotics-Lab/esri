@@ -123,12 +123,15 @@ define(["dojo/_base/declare",
 
 			addTiledLayer: function (description) {
 
-				this.webTiledLayer = new WebTiledLayer(description.url, {
+				var tilesUrl = description.url.replace("{z}", "{level}").replace("{y}", "{col}").replace("{x}", "{row}")
+
+				console.log("add ", tilesUrl)
+				this.webTiledLayer = new WebTiledLayer(tilesUrl, {
 					"copyright": '',
 					"id": description.name
 				});
 				this.map.addLayer(this.webTiledLayer);
-				this.setLayersDifinitionExpression(description)
+				this.setLayersDefinitionExpression(description)
 				console.log(description)
 
 				/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
@@ -143,7 +146,7 @@ define(["dojo/_base/declare",
 
 			},
 
-			setLayersDifinitionExpression: function (description) {
+			setLayersDefinitionExpression: function (description) {
 
 				var layersUrl = []
 
@@ -156,6 +159,7 @@ define(["dojo/_base/declare",
 
 					if (layersUrl.includes(layer.url)) {
 						console.log("layer = ", layer)
+						layer.setDefinitionExpression(this.config.surveyNameField + " = '" + description.name + "'")
 					}
 
 				});
