@@ -123,6 +123,7 @@ define(["dojo/_base/declare",
 					"id": description.name
 				});
 				this.map.addLayer(this.webTiledLayer);
+				this.setLayersDifinitionExpression(description)
 				console.log(description)
 
 				/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
@@ -135,6 +136,25 @@ define(["dojo/_base/declare",
 	
 					this.map.setExtent(extent); */
 
+			},
+
+			setLayersDifinitionExpression : function (description) {
+
+				var layersUrl = []
+
+				this.config.layers.forEach(element => {
+					layersUrl.push(element.url)
+				});
+
+
+				this.map._layers.forEach(layer => {
+					
+					if (layersUrl.includes(layer.url)) {
+						console.log("layer = ", layer)
+					}
+
+				});
+				
 			},
 
 			clearTiledLayer: function () {
@@ -245,9 +265,7 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
-					fl = new FeatureLayer(url);
-					console.log(fl)
-
+			
 					function onResults(results) {
 						console.log("result", results)
 
