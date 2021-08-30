@@ -158,7 +158,7 @@ define(["dojo/_base/declare",
 
 				this.layers.forEach(layer => {
 
-					console.info("jjjjj", layer.url)
+					console.info("jjjjj", layer)
 
 					if (layersUrl.includes(layer.url)) {
 						console.log("layer = ", layer)
