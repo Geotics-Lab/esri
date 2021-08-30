@@ -240,7 +240,6 @@ define(["dojo/_base/declare",
 									uniqueMissionList.push(template.name)
 									description.push(template)
 								}
-								console.log(surveyName)
 							});
 
 
