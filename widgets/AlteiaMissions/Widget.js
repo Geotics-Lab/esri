@@ -245,6 +245,9 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
+					fl = new FeatureLayer(url);
+					console.log(fl)
+
 					function onResults(results) {
 						console.log("result", results)
 
