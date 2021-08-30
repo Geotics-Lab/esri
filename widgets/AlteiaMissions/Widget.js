@@ -288,7 +288,7 @@ define(["dojo/_base/declare",
 
 					query = new Query();
 					//query.returnGeometry = false;
-					//query.outFields = ["*"];
+					query.outFields = ["*"];
 					query.where = "1=1";
 
 					console.info(query,queryTask)
