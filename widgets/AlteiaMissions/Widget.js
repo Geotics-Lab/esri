@@ -45,6 +45,7 @@ define(["dojo/_base/declare",
 				console.log("missions")
 				console.log(this)
 				var self = this
+				this.layers = this.getLayers()
 				this.webTiledLayer = null
 				this.missionsDescription = null
 				this.surveyDescription = null
@@ -125,14 +126,12 @@ define(["dojo/_base/declare",
 
 				var tilesUrl = description.url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
 
-				console.log("add ", tilesUrl)
 				this.webTiledLayer = new WebTiledLayer(tilesUrl, {
 					"copyright": '',
 					"id": description.name
 				});
 				this.map.addLayer(this.webTiledLayer);
 				this.setLayersDefinitionExpression(description)
-				console.log(description)
 
 				/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
 					var extent = new Extent();
@@ -157,7 +156,7 @@ define(["dojo/_base/declare",
 				console.info(layersUrl)
 
 
-				this.map._layers.forEach(layer => {
+				this.layers.forEach(layer => {
 
 					console.info("jjjjj", layer.url)
 
@@ -317,7 +316,7 @@ define(["dojo/_base/declare",
 				});
 
 
-				this.map._layers.forEach(layer => {
+				this.layers.forEach(layer => {
 
 					if (layersUrl.includes(layer.url)) {
 						checkedLayers ++
@@ -328,6 +327,19 @@ define(["dojo/_base/declare",
 
 				});
 				
+			},
+
+			getLayers : function name(params) {
+
+				var layers = []
+				
+				this.map.graphicsLayerIds.forEach(element => {
+
+					layers.push(this.map.getLayer(element))
+					
+				});
+
+				return layers
 			}
 
 
