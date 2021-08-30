@@ -161,9 +161,18 @@ define(["dojo/_base/declare",
 					console.info("jjjjj", layer)
 
 					if (layersUrl.includes(layer.url)) {
+
+						var definitionExpressionField = null
+
+						this.config.layers.forEach(element => {
+							if (element.url == layer.url) {
+								definitionExpressionField = element.surveyNameField
+							}
+							
+						});
 						console.log("layer = ", layer)
-						console.log(this.config.surveyNameField + " = '" + description.name + "'")
-						layer.setDefinitionExpression(this.config.surveyNameField + " = '" + description.name + "'")
+						console.log(definitionExpressionField + " = '" + description.name + "'")
+						layer.setDefinitionExpression(definitionExpressionField + " = '" + description.name + "'")
 					}
 
 				});
