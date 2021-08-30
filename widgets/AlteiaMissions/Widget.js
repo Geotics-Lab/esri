@@ -178,7 +178,7 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
-					var uniqueMissionList = [] 
+					var uniqueMissionList = []
 					var description = []
 					var allFeaturesPromise = []
 
@@ -198,38 +198,34 @@ define(["dojo/_base/declare",
 
 						allFeaturesPromise.push(self.getAllLayerFeatures(layer.url))
 
-						Promise.all(allFeaturesPromise).then(function (values) {
-
-							values.forEach(value => {
-								console.log(value)
-
-								value.features.forEach(feature => {
-									template.name = feature.attributes[self.config.layers[value.index].surveyNameField]
-									template.date = feature.attributes[self.config.layers[value.index].surveyDateField]
-									template.url = feature.attributes[self.config.layers[value.index].surveyTileField]
-
-									if (uniqueMissionList.includes(template.name) == false) {
-										uniqueMissionList.push(template.name)
-										description.push(template)
-									}
-									console.log(surveyName)
-								});
+					}
 
 
+
+					Promise.all(allFeaturesPromise).then(function (values) {
+
+						values.forEach(value => {
+							console.log(value)
+
+							value.features.forEach(feature => {
+								template.name = feature.attributes[self.config.layers[value.index].surveyNameField]
+								template.date = feature.attributes[self.config.layers[value.index].surveyDateField]
+								template.url = feature.attributes[self.config.layers[value.index].surveyTileField]
+
+								if (uniqueMissionList.includes(template.name) == false) {
+									uniqueMissionList.push(template.name)
+									description.push(template)
+								}
+								console.log(surveyName)
 							});
 
 
-							resolve(description)
-
-						})
+						});
 
 
+						resolve(description)
 
-
-					}
-					
-
-					
+					})
 
 
 
@@ -245,7 +241,7 @@ define(["dojo/_base/declare",
 
 				return new Promise((resolve, reject) => {
 
-					
+
 					for (var index = 0; index < self.config.layers.length; index++) {
 						const element = self.config.layers[index];
 						if (url == element.url) {
