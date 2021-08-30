@@ -205,7 +205,7 @@ define(["dojo/_base/declare",
 
 								value.features.forEach(feature => {
 									template.name = feature.attributes[self.config.layers[value.index].surveyNameField]
-									//template.date surveyDate = feature.attributes[self.config.layers[value.index].surveyDateField]
+									template.date = feature.attributes[self.config.layers[value.index].surveyDateField]
 									template.url = feature.attributes[self.config.layers[value.index].surveyTileField]
 
 									if (uniqueMissionList.includes(template.name) == false) {
