@@ -159,7 +159,7 @@ define(["dojo/_base/declare",
 
 				this.map._layers.forEach(layer => {
 
-					console.info(layer.url)
+					console.info("jjjjj", layer.url)
 
 					if (layersUrl.includes(layer.url)) {
 						console.log("layer = ", layer)
