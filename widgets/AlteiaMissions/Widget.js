@@ -220,12 +220,6 @@ define(["dojo/_base/declare",
 					var description = []
 					var allFeaturesPromise = []
 
-					var template = {
-						url: "",
-						date: "",
-						name: ""
-					}
-
 
 
 					for (const key in self.config.layers) {
@@ -246,13 +240,14 @@ define(["dojo/_base/declare",
 							console.log(value)
 
 							value.features.forEach(feature => {
-								template.name = feature.attributes[self.config.layers[value.index].surveyNameField]
-								template.date = feature.attributes[self.config.layers[value.index].surveyDateField]
-								template.url = feature.attributes[self.config.layers[value.index].surveyTileField]
-console.log(uniqueMissionList, template.name)
-								if (uniqueMissionList.includes(template.name) == false) {
-									uniqueMissionList.push(template.name)
-									description.push(template)
+
+								if (uniqueMissionList.includes(feature.attributes[self.config.layers[value.index].surveyNameField]) == false) {
+									uniqueMissionList.push(feature.attributes[self.config.layers[value.index].surveyNameField])
+									description.push({
+										url: feature.attributes[self.config.layers[value.index].surveyTileField],
+										date: feature.attributes[self.config.layers[value.index].surveyDateField],
+										name: feature.attributes[self.config.layers[value.index].surveyNameField]
+									})
 								}
 							});
 
