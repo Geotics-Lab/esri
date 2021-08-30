@@ -48,9 +48,10 @@ define(["dojo/_base/declare",
 
 
         this["style-editor"].innerHTML = this.config.style
-        
-        this["style-save"].onclick = function (params) {
+
+        this["style-editor"].onchange = function (params) {
           this.config.style = this["style-editor"].innerHTML
+          console.log(this.config)
         }
 
       },
