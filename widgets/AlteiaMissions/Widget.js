@@ -249,6 +249,7 @@ define(["dojo/_base/declare",
 								var missionIsAlreadyAdded = uniqueMissionList.includes(feature.attributes[self.config.layers[value.index].surveyNameField])
 								var missionLength = feature.attributes[self.config.layers[value.index].surveyNameField].length
 
+								console.info(missionLength)
 								if (missionIsAlreadyAdded == false && missionLength > 0) {
 
 									uniqueMissionList.push(feature.attributes[self.config.layers[value.index].surveyNameField])
