@@ -266,7 +266,6 @@ define(["dojo/_base/declare",
 
 							value.features.forEach(feature => {
 
-								console.log(feature.attributes)
 								var missionIsAlreadyAdded = uniqueMissionList.includes(feature.attributes[self.config.layers[value.index].surveyNameField])
 								var missionLength = feature.attributes[self.config.layers[value.index].surveyNameField].length
 
