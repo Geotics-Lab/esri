@@ -47,6 +47,7 @@ define(["dojo/_base/declare",
 				this.surveyDescription = null
 				this.startDate = null
 				this.endDate = null
+				this.temporaryDefinitionExpression = ""
 
 				this.host = this.config.host
 
@@ -154,6 +155,7 @@ define(["dojo/_base/declare",
 					if (layersUrl.includes(layer.url)) {
 
 						var definitionExpressionField = null
+						var definitionExpression = layer.getDefinitionExpression()
 
 						this.config.layers.forEach(element => {
 							if (element.url == layer.url) {
@@ -162,7 +164,15 @@ define(["dojo/_base/declare",
 							
 						});
 						
-						layer.setDefinitionExpression(definitionExpressionField + " = '" + description.name + "'")
+						if (this.temporaryDefinitionExpression.length > 0) {
+							definitionExpression.replace(this.temporaryDefinitionExpression, "")
+							
+
+						}
+						
+						this.temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
+						layer.setDefinitionExpression(definitionExpression + " AND " + this.temporaryDefinitionExpression)
+						
 					}
 
 				});
