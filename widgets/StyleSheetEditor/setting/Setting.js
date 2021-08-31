@@ -14,19 +14,10 @@
 // limitations under the License.
 ///////////////////////////////////////////////////////////////////////////
 define(["dojo/_base/declare",
-  "dojo/_base/lang",
-  "dojo/query",
-  "dojo/dom-class",
-  "dojo/dom-construct",
   "jimu/BaseWidgetSetting",
-  "dijit/_WidgetsInTemplateMixin",
-  "dijit/form/Form",
-  "jimu/dijit/CheckBox",
-  "dijit/form/NumberTextBox",
-  "dijit/form/ValidationTextBox"
+  "dijit/_WidgetsInTemplateMixin"
 ],
-  function (declare, lang, query, domClass, domConstruct,
-    BaseWidgetSetting, _WidgetsInTemplateMixin) {
+  function (declare,BaseWidgetSetting, _WidgetsInTemplateMixin) {
 
     return declare([BaseWidgetSetting, _WidgetsInTemplateMixin], {
 
@@ -45,13 +36,13 @@ define(["dojo/_base/declare",
         }
         this.inherited(arguments);
         this.setConfig(this.config);
+        var self = this;
 
-
-        this["style-editor"].innerHTML = this.config.style
+        this["style-editor"].value = this.config.style
 
         this["style-editor"].onchange = function (params) {
-          this.config.style = this["style-editor"].innerHTML
-          console.log(this.config)
+          self.config.style = self["style-editor"].value
+          console.log(self.config)
         }
 
       },
@@ -68,8 +59,6 @@ define(["dojo/_base/declare",
 
       setConfig: function (config) {
         this.config = config || {};
-        var self = this;
-
 
       }
 
