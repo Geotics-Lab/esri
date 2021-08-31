@@ -157,7 +157,13 @@ define(["dojo/_base/declare",
 					if (layersUrl.includes(layer.url)) {
 
 						var definitionExpressionField = null
-						var definitionExpression = layer.getDefinitionExpression()
+
+						if (layer.getDefinitionExpression() == undefined) {
+							var definitionExpression = "1 = 1"
+						}
+						else {
+							var definitionExpression = layer.getDefinitionExpression()
+						}
 						
 
 						console.log("this.temporaryDefinitionExpression", this.temporaryDefinitionExpression)
