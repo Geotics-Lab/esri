@@ -38,12 +38,8 @@ define(["dojo/_base/declare",
 
 			startup: function () {
 
-				this.map.on('load', function (e) {
-					console.warn("mapload")
-				})
+				console.log("alteia missions", this)
 
-				console.log("missions")
-				console.log(this)
 				var self = this
 				this.layers = this.getLayers()
 				this.webTiledLayer = null
@@ -62,10 +58,9 @@ define(["dojo/_base/declare",
 				})
 
 				this["mission-selector"].onchange = function (e) {
-					console.log(this)
+
 					self.surveyDescription = self.missionsDescription[this.value]
 					self.clearTiledLayer()
-					console.info(self.surveyDescription)
 					self.addTiledLayer(self.surveyDescription)
 
 				}
@@ -153,12 +148,8 @@ define(["dojo/_base/declare",
 					layersUrl.push(element.url)
 				});
 
-				console.info(layersUrl)
-
-
 				this.layers.forEach(layer => {
 
-					console.info("jjjjj", layer)
 
 					if (layersUrl.includes(layer.url)) {
 
@@ -170,8 +161,7 @@ define(["dojo/_base/declare",
 							}
 							
 						});
-						console.log("layer = ", layer)
-						console.log(definitionExpressionField + " = '" + description.name + "'")
+						
 						layer.setDefinitionExpression(definitionExpressionField + " = '" + description.name + "'")
 					}
 
@@ -234,8 +224,6 @@ define(["dojo/_base/declare",
 
 						const layer = self.config.layers[key];
 
-						console.log(layer)
-
 						allFeaturesPromise.push(self.getAllLayerFeatures(layer.url))
 
 					}
@@ -245,11 +233,14 @@ define(["dojo/_base/declare",
 					Promise.all(allFeaturesPromise).then(function (values) {
 
 						values.forEach(value => {
-							console.log(value)
 
 							value.features.forEach(feature => {
 
-								if (uniqueMissionList.includes(feature.attributes[self.config.layers[value.index].surveyNameField]) == false) {
+								var missionIsAlreadyAdded = uniqueMissionList.includes(feature.attributes[self.config.layers[value.index].surveyNameField])
+								var missionLength = feature.attributes[self.config.layers[value.index].surveyNameField].length
+
+								if (missionIsAlreadyAdded == false && missionLength > 0) {
+
 									uniqueMissionList.push(feature.attributes[self.config.layers[value.index].surveyNameField])
 									description.push({
 										url: feature.attributes[self.config.layers[value.index].surveyTileField],
@@ -262,7 +253,6 @@ define(["dojo/_base/declare",
 
 						});
 
-						console.warn(description)
 						resolve(description)
 
 					})
