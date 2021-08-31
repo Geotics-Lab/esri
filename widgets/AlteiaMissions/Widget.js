@@ -178,11 +178,11 @@ define(["dojo/_base/declare",
 						
 						var temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
 						layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
-						
+						this.temporaryDefinitionExpression = temporaryDefinitionExpression 
 					}
 
 				});
-				this.temporaryDefinitionExpression = temporaryDefinitionExpression 
+				
 
 
 			},
