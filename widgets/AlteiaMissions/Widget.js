@@ -144,6 +144,7 @@ define(["dojo/_base/declare",
 			setLayersDefinitionExpression: function (description) {
 
 				var layersUrl = []
+				var previousDefinitionExpression = this.temporaryDefinitionExpression
 
 				this.config.layers.forEach(element => {
 					layersUrl.push(element.url)
@@ -167,7 +168,7 @@ define(["dojo/_base/declare",
 						
 
 						console.log("this.temporaryDefinitionExpression", this.temporaryDefinitionExpression)
-						console.log("definitionExpression",definitionExpression)
+						console.log("definitionExpression : ",definitionExpression)
 
 						this.config.layers.forEach(element => {
 							if (element.url == layer.url) {
@@ -181,7 +182,7 @@ define(["dojo/_base/declare",
 						
 						if (this.temporaryDefinitionExpression.length > 0) {
 							
-							definitionExpression.replace(temporaryDefinitionExpression, "")
+							definitionExpression.replace(previousDefinitionExpression, "")
 							
 
 						}
