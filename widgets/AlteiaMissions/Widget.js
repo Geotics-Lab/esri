@@ -151,11 +151,16 @@ define(["dojo/_base/declare",
 
 				this.layers.forEach(layer => {
 
+					console.log(layer)
+
 
 					if (layersUrl.includes(layer.url)) {
 
 						var definitionExpressionField = null
 						var definitionExpression = layer.getDefinitionExpression()
+
+						console.log("this.temporaryDefinitionExpression", this.temporaryDefinitionExpression)
+						console.log("definitionExpression",definitionExpression)
 
 						this.config.layers.forEach(element => {
 							if (element.url == layer.url) {
