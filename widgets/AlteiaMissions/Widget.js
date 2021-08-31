@@ -169,14 +169,17 @@ define(["dojo/_base/declare",
 							}
 							
 						});
+
+						var temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
+
 						
 						if (this.temporaryDefinitionExpression.length > 0) {
+							
 							definitionExpression.replace(temporaryDefinitionExpression, "")
 							
 
 						}
 						
-						var temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
 						layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
 						this.temporaryDefinitionExpression = temporaryDefinitionExpression 
 					}
@@ -257,7 +260,6 @@ define(["dojo/_base/declare",
 								var missionIsAlreadyAdded = uniqueMissionList.includes(feature.attributes[self.config.layers[value.index].surveyNameField])
 								var missionLength = feature.attributes[self.config.layers[value.index].surveyNameField].length
 
-								console.info(missionLength)
 								if (missionIsAlreadyAdded == false && missionLength > 1) {
 
 									uniqueMissionList.push(feature.attributes[self.config.layers[value.index].surveyNameField])
