@@ -183,7 +183,7 @@ define(["dojo/_base/declare",
 						
 						if (this.temporaryDefinitionExpression.length > 0) {
 							
-							definitionExpression.replace(previousDefinitionExpression, "")
+							definitionExpression = definitionExpression.replace(previousDefinitionExpression, "")
 							console.log("new base definitionExpression : ",definitionExpression)
 
 
