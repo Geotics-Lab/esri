@@ -158,6 +158,7 @@ define(["dojo/_base/declare",
 
 						var definitionExpressionField = null
 						var definitionExpression = layer.getDefinitionExpression()
+						
 
 						console.log("this.temporaryDefinitionExpression", this.temporaryDefinitionExpression)
 						console.log("definitionExpression",definitionExpression)
@@ -170,17 +171,19 @@ define(["dojo/_base/declare",
 						});
 						
 						if (this.temporaryDefinitionExpression.length > 0) {
-							definitionExpression.replace(this.temporaryDefinitionExpression, "")
+							definitionExpression.replace(temporaryDefinitionExpression, "")
 							
 
 						}
 						
-						this.temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
-						layer.setDefinitionExpression(definitionExpression + " AND " + this.temporaryDefinitionExpression)
+						var temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
+						layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
 						
 					}
 
 				});
+				this.temporaryDefinitionExpression = temporaryDefinitionExpression 
+
 
 			},
 
@@ -255,7 +258,7 @@ define(["dojo/_base/declare",
 								var missionLength = feature.attributes[self.config.layers[value.index].surveyNameField].length
 
 								console.info(missionLength)
-								if (missionIsAlreadyAdded == false && missionLength > 0) {
+								if (missionIsAlreadyAdded == false && missionLength > 1) {
 
 									uniqueMissionList.push(feature.attributes[self.config.layers[value.index].surveyNameField])
 									description.push({
