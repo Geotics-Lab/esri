@@ -200,6 +200,8 @@ define(["dojo/_base/declare",
 			},
 
 			setExtentOfDefinitionExpression: function (definitionExpression) {
+
+				var self = this
 				
 				featureLayer = new FeatureLayer("https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_DroneLandMarks/FeatureServer/0")
 				
@@ -209,8 +211,11 @@ define(["dojo/_base/declare",
 				query.outFields = ["*"];
 				query.where = definitionExpression
 
-				featureLayer.queryExtent(query, function (extent) {
-					console.log(extent)
+				featureLayer.queryExtent(query, function (result) {
+					console.log(result.extent)
+					var center = result.extent.getCenter()
+
+					self.map.centerAndZoom(center, self.map.getZoom())
 				});
 			},
 
