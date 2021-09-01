@@ -213,9 +213,10 @@ define(["dojo/_base/declare",
 
 				featureLayer.queryExtent(query, function (result) {
 					console.log(result.extent)
-					var center = result.extent.getCenter()
+					//var center = result.extent.getCenter()
 
-					self.map.centerAndZoom(center, self.map.getZoom())
+					//self.map.centerAndZoom(center, self.map.getZoom())
+					self.map.setExtent(result.extent, true)
 				});
 			},
 
