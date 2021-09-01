@@ -165,38 +165,53 @@ define(["dojo/_base/declare",
 						else {
 							var definitionExpression = layer.getDefinitionExpression()
 						}
-						
+
 
 						console.log("this.temporaryDefinitionExpression", this.temporaryDefinitionExpression)
-						console.log("definitionExpression : ",definitionExpression)
-						console.log("previousDefinitionExpression : ",previousDefinitionExpression)
+						console.log("definitionExpression : ", definitionExpression)
+						console.log("previousDefinitionExpression : ", previousDefinitionExpression)
 
 						this.config.layers.forEach(element => {
 							if (element.url == layer.url) {
 								definitionExpressionField = element.surveyNameField
 							}
-							
+
 						});
 
-						var temporaryDefinitionExpression =  definitionExpressionField + " = '" + description.name + "'"
+						var temporaryDefinitionExpression = definitionExpressionField + " = '" + description.name + "'"
 
-						
+
 						if (this.temporaryDefinitionExpression.length > 0) {
-							
+
 							definitionExpression = definitionExpression.replace(" AND " + previousDefinitionExpression, "")
-							console.log("new base definitionExpression : ",definitionExpression)
+							console.log("new base definitionExpression : ", definitionExpression)
 
 
 						}
-						console.log("new definitionExpression : ",definitionExpression + " AND " + temporaryDefinitionExpression)
+						console.log("new definitionExpression : ", definitionExpression + " AND " + temporaryDefinitionExpression)
 						layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
-						this.temporaryDefinitionExpression = temporaryDefinitionExpression 
+						this.temporaryDefinitionExpression = temporaryDefinitionExpression
 					}
 
 				});
+
+				this.setExtentOfDefinitionExpression(this.temporaryDefinitionExpression)
+
+			},
+
+			setExtentOfDefinitionExpression: function (definitionExpression) {
+				
+				featureLayer = new FeatureLayer("https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_DroneLandMarks/FeatureServer/0")
+				
+				query = new Query();
 				
 
+				query.outFields = ["*"];
+				query.where = definitionExpression
 
+				featureLayer.queryExtent(query, function (extent) {
+					console.log(extent)
+				});
 			},
 
 			clearTiledLayer: function () {
@@ -335,7 +350,7 @@ define(["dojo/_base/declare",
 
 			},
 
-			executeIfLayersLoaded : function (callback) {
+			executeIfLayersLoaded: function (callback) {
 
 				var toCheckLayers = []
 				var checkedLayers = 0
@@ -348,24 +363,24 @@ define(["dojo/_base/declare",
 				this.layers.forEach(layer => {
 
 					if (layersUrl.includes(layer.url)) {
-						checkedLayers ++
+						checkedLayers++
 						if (toCheckLayers.length == checkedLayers) {
 							callback()
 						}
 					}
 
 				});
-				
+
 			},
 
-			getLayers : function name(params) {
+			getLayers: function name(params) {
 
 				var layers = []
-				
+
 				this.map.graphicsLayerIds.forEach(element => {
 
 					layers.push(this.map.getLayer(element))
-					
+
 				});
 
 				return layers
