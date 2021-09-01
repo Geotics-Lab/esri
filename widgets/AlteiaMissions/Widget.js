@@ -216,7 +216,10 @@ define(["dojo/_base/declare",
 					//var center = result.extent.getCenter()
 
 					//self.map.centerAndZoom(center, self.map.getZoom())
-					self.map.setExtent(result.extent, true)
+					self.map.setExtent(result.extent, true).then(function (params) {
+						self.map.setZoom(self.map.getZoom()-1)
+					})
+					
 				});
 			},
 
