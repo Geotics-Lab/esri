@@ -1,0 +1,13 @@
+{
+  "name": "QueryToChart",
+  "platform": "HTML",
+  "version": "2.7",
+  "wabVersion": "2.7",
+  "author": "Hugues Pascault",
+  "description": "Visit www.geotics.fr",
+  "copyright": "Geotics S.A.S.U",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+  	"hasVersionManager": true
+  }
+}
