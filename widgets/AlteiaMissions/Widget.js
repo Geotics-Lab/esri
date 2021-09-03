@@ -189,7 +189,7 @@ define(["dojo/_base/declare",
 
 						}
 						console.log("new definitionExpression : ", definitionExpression + " AND " + temporaryDefinitionExpression)
-						layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
+						//layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
 						this.temporaryDefinitionExpression = temporaryDefinitionExpression
 					}
 
