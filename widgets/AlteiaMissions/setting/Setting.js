@@ -33,23 +33,46 @@ define(["dojo/_base/declare",
       baseClass: "jimu-widget-add-data-setting",
   
 
-      postCreate: function() {
+
+      postCreate: function () {
         this.inherited(arguments);
 
         var self = this;
       },
 
-      startup: function() {
+      startup: function () {
         if (this._started) {
           return;
         }
         this.inherited(arguments);
         this.setConfig(this.config);
+        var self = this;
+
+        this["config-layer"].value = this.config.layers
+        this["filter-map-setter"].setAttribute('checked', this.config.filterAction)
+        this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
+        
+
+        this["config-layer"].onchange = function (params) {
+          self.config.layers = self["config-layer"].value
+          console.log(self.config)
+        }
+
+        this["filter-map-setter"].onchange = function (params) {
+          self.config.filterAction = this.checked
+          console.log(self.config)
+        }
+
+        this["zoom-map-setter"].onchange = function (params) {
+          self.config.zoomAction = this.checked
+          console.log(self.config)
+        }
+
       },
 
-      getConfig: function() {
-       
-	   
+      getConfig: function () {
+
+
         if (!this.config) {
           this.config = {};
         }
@@ -57,10 +80,8 @@ define(["dojo/_base/declare",
         return this.config;
       },
 
-      setConfig: function(config) {
+      setConfig: function (config) {
         this.config = config || {};
-        var self = this;
-
 
       }
 

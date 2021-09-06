@@ -1,4 +1,6 @@
 {
+  "zoomAction" : false,
+  "filterAction" : false,
   "layers": [
     {
       "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_DroneLandMarks/FeatureServer/0",

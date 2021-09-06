@@ -189,13 +189,22 @@ define(["dojo/_base/declare",
 
 						}
 						console.log("new definitionExpression : ", definitionExpression + " AND " + temporaryDefinitionExpression)
-						//layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
+						
+						if (this.config.filterAction == true) {
+							layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
+						}
+						
 						this.temporaryDefinitionExpression = temporaryDefinitionExpression
 					}
 
 				});
 
-				this.setExtentOfDefinitionExpression(this.temporaryDefinitionExpression)
+
+				if (this.config.zoomAction == true) {
+					this.setExtentOfDefinitionExpression(this.temporaryDefinitionExpression)
+				}
+
+				
 
 			},
 
