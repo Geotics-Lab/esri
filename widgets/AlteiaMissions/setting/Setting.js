@@ -54,7 +54,7 @@ define(["dojo/_base/declare",
         
 
         this["config-layer"].onchange = function (params) {
-          self.config.layers = self["config-layer"].value
+          self.config.layers = JSON.parse(self["config-layer"].value)
           console.log(self.config)
         }
 
