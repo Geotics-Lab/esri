@@ -56,7 +56,7 @@ define(["dojo/_base/declare",
         if (this.config.filterAction == true) {
           this["filter-map-setter"].setAttribute('checked', this.config.filterAction)
         }
-        if (this.zoomAction.filterAction == true) {
+        if (this.config.zoomAction.filterAction == true) {
           this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
         }
         
