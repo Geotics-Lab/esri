@@ -41,6 +41,8 @@ define(["dojo/_base/declare",
       },
 
       startup: function () {
+
+
         if (this._started) {
           return;
         }
@@ -48,9 +50,17 @@ define(["dojo/_base/declare",
         this.setConfig(this.config);
         var self = this;
 
-        this["config-layer"].value = this.config.layers
-        this["filter-map-setter"].setAttribute('checked', this.config.filterAction)
-        this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
+        this["config-layer"].value = JSON.stringify(this.config.layers)
+
+
+        if (this.config.filterAction == true) {
+          this["filter-map-setter"].setAttribute('checked', this.config.filterAction)
+        }
+        if (this.zoomAction.filterAction == true) {
+          this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
+        }
+        
+       
         
 
         this["config-layer"].onchange = function (params) {
