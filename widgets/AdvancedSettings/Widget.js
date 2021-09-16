@@ -118,8 +118,12 @@ define(["dojo/_base/declare",
 
         var baseExpressionDefinition = ""
         var operator = ""
+        console.log("de" + layer.getDefinitionExpression())
         if (layer.getDefinitionExpression() != undefined) {
           if (layer.getDefinitionExpression().length > 0) {
+
+            var baseExpressionDefinition = layer.getDefinitionExpression()
+            var operator = " OR "
 
           }
         }
@@ -133,7 +137,7 @@ define(["dojo/_base/declare",
       unsetDefinitionExpression: function (layer, definitionExpression) {
         console.log(layer, definitionExpression)
         try {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(" AND " + definitionExpression, "")
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(" OR " + definitionExpression, "")
 
         } catch (error) {
 
