@@ -66,7 +66,7 @@ define(["dojo/_base/declare",
 
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
           var filteredLayer = this.map.getLayer(element.filteredLayerId)
-          var filter = element.layerFilterField+ element.layerFilterOperator +element.layerFilterValue
+          var filter = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
           element.layerFilter
           var applyIfVisible = element.applyIfVisible
 
@@ -136,18 +136,24 @@ define(["dojo/_base/declare",
       },
       unsetDefinitionExpression: function (layer, definitionExpression) {
         console.log(layer, definitionExpression)
-        try {
+        console.log(layer.getDefinitionExpression())
+
+
+        if (layer.getDefinitionExpression().includes(definitionExpression + " OR ")) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " OR ", "")
+          console.log("replace : x or")
+
+        }
+        else if (layer.getDefinitionExpression().includes(" OR " + definitionExpression )) {
           var newDefinitionExpression = layer.getDefinitionExpression().replace(" OR " + definitionExpression, "")
-
-        } catch (error) {
-
+          console.log("replace : or x")
         }
-        try {
+        else{
           var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression, "")
-
-        } catch (error) {
-
+          console.log("replace : x")
         }
+
+
         layer.setDefinitionExpression(newDefinitionExpression);
         console.log(newDefinitionExpression)
         console.log(layer.getDefinitionExpression())
