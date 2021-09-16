@@ -156,7 +156,7 @@ define(["dojo/_base/declare",
         }
         this["reset-params"].onclick = function (params) {
           self.config.filterLayerOnLayerVisibilityChange = []
-          self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2).replace("<","&lt;").replace(">",'&gt;')
+          self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2)
 
         }
 
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
         }
 
         this["valid-edit-params"].onclick = function (e) {
-          console.log(self["retrieved-params"])
+          console.log(JSON.parse(self["retrieved-params"].innerText))
           self.config.filterLayerOnLayerVisibilityChange = JSON.parse(self["retrieved-params"].innerText)
           self["retrieved-params"].setAttribute('contenteditable', "false")
           self["valid-edit-params"].style.display = "none"
