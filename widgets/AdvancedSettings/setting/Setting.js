@@ -177,11 +177,18 @@ define(["dojo/_base/declare",
         }
 
         this["valid-edit-params"].onclick = function (e) {
-          self.config.filterLayerOnLayerVisibilityChange = JSON.parse(self["retrieved-params"].innerHTML.replace("&lt;" , "<").replace('&gt;', ">"))
+          console.log(self["retrieved-params"])
+          self.config.filterLayerOnLayerVisibilityChange = JSON.parse(self["retrieved-params"].innerText)
           self["retrieved-params"].setAttribute('contenteditable', "false")
           self["valid-edit-params"].style.display = "none"
         }
 
+      },
+
+      sanitizeHtml: function (string) {
+
+        return string.replace("&lt;" , "<").replace('&gt;', ">")
+        
       },
 
       getConfig: function () {

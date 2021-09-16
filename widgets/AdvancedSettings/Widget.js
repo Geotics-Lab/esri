@@ -134,6 +134,8 @@ define(["dojo/_base/declare",
         console.log(layer.getDefinitionExpression())
 
       },
+
+      
       unsetDefinitionExpression: function (layer, definitionExpression) {
         console.log(layer, definitionExpression)
         console.log(layer.getDefinitionExpression())
