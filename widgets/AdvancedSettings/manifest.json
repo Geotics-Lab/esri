@@ -1,0 +1,13 @@
+{
+  "name": "AdvancedSettings",
+  "platform": "HTML",
+  "version": "2.19",
+  "wabVersion": "2.19",
+  "author": "Hugues Pascault",
+  "description": "www.geotics.fr",
+  "copyright": "Geotics S.A.S.U",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "properties": {
+    "hasConfig": true
+  }
+}

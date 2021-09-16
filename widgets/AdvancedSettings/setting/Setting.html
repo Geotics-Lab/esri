@@ -1,0 +1,43 @@
+<div>
+	<div data-dojo-attach-point="filter-layer-on-layer-visibility-change">
+		<div>
+			<select data-dojo-attach-point="visibility-layer-id">
+				<option>visibility layer</option>
+			</select>
+			<select data-dojo-attach-point="filtered-layer-id">
+				<option>filtered layer</option>
+			</select>
+		</div>
+		<div>
+			<span>Apply filter on layer visibility set to true :</span>
+			<input data-dojo-attach-point="apply-if-visible" type="checkbox">
+		</div>
+		<div>
+
+			<select data-dojo-attach-point="layer-filter-field">
+				<option>select field</option>
+			</select>
+			<select data-dojo-attach-point="layer-filter-operator">
+				<option value="=">=</option>
+				<option value="!=">!=</option>
+			</select>
+			<input data-dojo-attach-point="layer-filter-value">
+			<button data-dojo-attach-point="add-params">add parameters</button>
+		</div>
+
+
+
+
+		<pre data-dojo-attach-point="retrieved-params" contenteditable="false">
+
+
+		</pre>
+
+		<div>
+			<button data-dojo-attach-point="reset-params">reset parameter</button>
+			<button data-dojo-attach-point="toggle-edit-params">edit parameter</button>
+			<button data-dojo-attach-point="valid-edit-params" style="display: none;">valid editing</button>
+		</div>
+
+	</div>
+</div>
