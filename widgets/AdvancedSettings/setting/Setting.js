@@ -128,7 +128,7 @@ define(["dojo/_base/declare",
         }
         this["layer-filter-operator"].onchange = function (e) {
           console.log(e)
-          self.visibilityTogglingFilterParameters.layerFilterOperator = e.target.value
+          self.visibilityTogglingFilterParameters.layerFilterOperator = e.target.value.replace("&lt;" , "<").replace('&gt;', ">")
         }
 
         this["layer-filter-value"].oninput = function (e) {
@@ -156,7 +156,7 @@ define(["dojo/_base/declare",
         }
         this["reset-params"].onclick = function (params) {
           self.config.filterLayerOnLayerVisibilityChange = []
-          self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2)
+          self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2).replace("<","&lt;").replace(">",'&gt;')
 
         }
 
@@ -177,7 +177,7 @@ define(["dojo/_base/declare",
         }
 
         this["valid-edit-params"].onclick = function (e) {
-          self.config.filterLayerOnLayerVisibilityChange = JSON.parse(self["retrieved-params"].innerHTML)
+          self.config.filterLayerOnLayerVisibilityChange = JSON.parse(self["retrieved-params"].innerHTML.replace("&lt;" , "<").replace('&gt;', ">"))
           self["retrieved-params"].setAttribute('contenteditable', "false")
           self["valid-edit-params"].style.display = "none"
         }
