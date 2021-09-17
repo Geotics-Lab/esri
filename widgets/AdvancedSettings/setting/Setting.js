@@ -144,7 +144,8 @@ define(["dojo/_base/declare",
             self.visibilityTogglingFilterParameters.filteredLayerId != null && 
             self.visibilityTogglingFilterParameters.visibilityLayerId != null
             ){
-            self.config.filterLayerOnLayerVisibilityChange.push(self.visibilityTogglingFilterParameters)
+            self.config.filterLayerOnLayerVisibilityChange.push(JSON.parse(JSON.stringify(self.visibilityTogglingFilterParameters)))
+            console.log(self.config.filterLayerOnLayerVisibilityChange)
             self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2)
 
           }
