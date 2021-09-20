@@ -1,10 +1,47 @@
-[data-dojo-attach-point="retrieved-params"]{
+@import url("https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css");
+@import url("https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.css");
+
+textarea{
   font-size: small;
-  max-height: 200px;
+  height: 200px;
   overflow: auto;
+  font-family: Courier New;
+  background: rgba(0,0,0,0.8) !important;
+  color: rgba(255,255,255,0.8) !important;
 }
 
-[data-dojo-attach-point="retrieved-params"]{
-  background: rgba(0,0,0,0.8);
-  color: rgba(255,255,255,0.8);
+[data-dojo-attach-point="visibility-layer-id"]{
+  display: inline;
+  width : 50%;
+}
+[data-dojo-attach-point="filtered-layer-id"]{
+  display: inline;
+  width : 50%;
+}
+[data-dojo-attach-point="layer-filter-field"]{
+  display: inline;
+  width : 20%;
+}
+[data-dojo-attach-point="layer-filter-operator"]{
+  display: inline;
+  width : 90px;
+}
+[data-dojo-attach-point="layer-filter-value"]{
+  display: inline;
+  width : 20%;
+}
+
+.flex{
+  display: flex;
+}
+
+[data-dojo-attach-point="custom-css-content"]{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+[data-dojo-attach-point="add-header-content"]{
+  display: block;
+  margin: 15px auto;
 }

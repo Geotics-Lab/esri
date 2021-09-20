@@ -12,22 +12,19 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
+
 ///////////////////////////////////////////////////////////////////////////
 define(["dojo/_base/declare",
-  "dojo/_base/lang",
-  "dojo/on",
-  "esri/layers/WebTiledLayer",
-  "esri/geometry/Extent",
-  "esri/SpatialReference",
   "jimu/BaseWidget",
   "dijit/_WidgetsInTemplateMixin",
   "dojo/_base/array"
 ],
-  function (declare, lang, on, WebTiledLayer, Extent, SpatialReference, BaseWidget, _WidgetsInTemplateMixin, array) {
+  function (declare, BaseWidget, _WidgetsInTemplateMixin, array) {
     return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
-      name: "AddData",
-      baseClass: "jimu-widget-add-data",
+      name: "AdvencedSettings",
+      baseClass: "jimu-widget-advanced-settings",
 
       postCreate: function () {
         this.inherited(arguments);
@@ -46,12 +43,99 @@ define(["dojo/_base/declare",
             case "filterLayerOnLayerVisibilityChange":
               this.filterLayerOnLayerVisibilityChange(parameters)
               break;
+            case "customScript":
+              this.AddCustomScript(parameters)
+              break;
+            case "customCss":
+              this.AddCustomCss(parameters)
+              break;
 
 
           }
 
 
         }
+
+
+      },
+
+
+
+      AddCustomScript: function (scriptList) {
+
+
+        scriptList.forEach(scriptContent => {
+
+
+          switch (scriptContent.target) {
+            case "body":
+              var target = document.body
+              break;
+          
+            case "head":
+              var target = document.head
+              break;
+          }
+
+
+          console.log(target , scriptContent)
+
+          switch (scriptContent.format) {
+            case "src":
+              var script = document.createElement('script');
+              var test_element = document.createElement('div');
+              test_element.innerHTML = scriptContent.content;
+
+              var element = test_element.childNodes[0];
+              var attributes = element.attributes;
+
+              for (var i = 0; i < attributes.length; i++) {
+                var attribute = attributes[i];
+
+                script.setAttribute(attribute.name, attribute.value);
+              }
+              
+              target.appendChild(script);
+
+              break;
+
+            case "text":
+              var script = document.createElement('script');
+              script.type = 'text/javascript';
+              script.innerHTML = scriptContent.content
+              target.appendChild(script);
+              break;
+          }
+
+
+
+          //document.head.appendChild(createElementFromHTML(scriptContent.content))
+
+        });
+
+
+        function createElementFromHTML(htmlString) {
+          var div = document.createElement('div');
+          div.innerHTML = htmlString.trim();
+
+          return div.firstChild;
+        }
+
+
+      },
+
+      AddCustomCss: function (cssList) {
+
+
+        cssList.forEach(cssContent => {
+
+          var styleSheet = document.createElement("style")
+          styleSheet.type = "text/css"
+          styleSheet.innerText = cssContent.content
+          document.head.appendChild(styleSheet)
+
+        });
+
 
 
       },
@@ -135,7 +219,7 @@ define(["dojo/_base/declare",
 
       },
 
-      
+
       unsetDefinitionExpression: function (layer, definitionExpression) {
         console.log(layer, definitionExpression)
         console.log(layer.getDefinitionExpression())
@@ -146,11 +230,11 @@ define(["dojo/_base/declare",
           console.log("replace : x or")
 
         }
-        else if (layer.getDefinitionExpression().includes(" OR " + definitionExpression )) {
+        else if (layer.getDefinitionExpression().includes(" OR " + definitionExpression)) {
           var newDefinitionExpression = layer.getDefinitionExpression().replace(" OR " + definitionExpression, "")
           console.log("replace : or x")
         }
-        else{
+        else {
           var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression, "")
           console.log("replace : x")
         }
