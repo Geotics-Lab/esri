@@ -207,7 +207,7 @@ define(["dojo/_base/declare",
           if (layer.getDefinitionExpression().length > 0) {
 
             var baseExpressionDefinition = layer.getDefinitionExpression()
-            var operator = " OR "
+            var operator = " AND "
 
           }
         }
@@ -225,13 +225,13 @@ define(["dojo/_base/declare",
         console.log(layer.getDefinitionExpression())
 
 
-        if (layer.getDefinitionExpression().includes(definitionExpression + " OR ")) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " OR ", "")
+        if (layer.getDefinitionExpression().includes(definitionExpression + " AND ")) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " AND ", "")
           console.log("replace : x or")
 
         }
-        else if (layer.getDefinitionExpression().includes(" OR " + definitionExpression)) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(" OR " + definitionExpression, "")
+        else if (layer.getDefinitionExpression().includes(" AND " + definitionExpression)) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(" AND " + definitionExpression, "")
           console.log("replace : or x")
         }
         else {
