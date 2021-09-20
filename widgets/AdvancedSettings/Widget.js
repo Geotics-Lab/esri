@@ -151,6 +151,7 @@ define(["dojo/_base/declare",
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
           var filteredLayer = this.map.getLayer(element.filteredLayerId)
           var filter = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
+          var operator = element.layerFilterCondition
           element.layerFilter
           var applyIfVisible = element.applyIfVisible
 
@@ -165,11 +166,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.setDefinitionExpression(filteredLayer, filter)
+                    self.setDefinitionExpression(filteredLayer, filter, operator)
                     break;
 
                   case false:
-                    self.unsetDefinitionExpression(filteredLayer, filter)
+                    self.unsetDefinitionExpression(filteredLayer, filter, operator)
                     break;
                 }
 
@@ -197,17 +198,17 @@ define(["dojo/_base/declare",
 
       },
 
-      setDefinitionExpression: function (layer, definitionExpression) {
+      setDefinitionExpression: function (layer, definitionExpression, operator) {
         console.log(layer, definitionExpression)
 
         var baseExpressionDefinition = ""
         var operator = ""
-        console.log("de" + layer.getDefinitionExpression())
+
         if (layer.getDefinitionExpression() != undefined) {
           if (layer.getDefinitionExpression().length > 0) {
 
             var baseExpressionDefinition = layer.getDefinitionExpression()
-            var operator = " AND "
+            var operator = " " + operator+" "
 
           }
         }
@@ -220,18 +221,18 @@ define(["dojo/_base/declare",
       },
 
 
-      unsetDefinitionExpression: function (layer, definitionExpression) {
+      unsetDefinitionExpression: function (layer, definitionExpression, operator) {
         console.log(layer, definitionExpression)
         console.log(layer.getDefinitionExpression())
 
 
-        if (layer.getDefinitionExpression().includes(definitionExpression + " AND ")) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " AND ", "")
+        if (layer.getDefinitionExpression().includes(definitionExpression + " " + operator + " ")) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + operator + " ", "")
           console.log("replace : x or")
 
         }
-        else if (layer.getDefinitionExpression().includes(" AND " + definitionExpression)) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(" AND " + definitionExpression, "")
+        else if (layer.getDefinitionExpression().includes(" " + operator + " " + definitionExpression)) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(" " + operator + " " + definitionExpression, "")
           console.log("replace : or x")
         }
         else {

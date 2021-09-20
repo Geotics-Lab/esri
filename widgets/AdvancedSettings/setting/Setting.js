@@ -74,7 +74,8 @@ define(["dojo/_base/declare",
           "filteredLayerId": null,
           "layerFilterField": null,
           "layerFilterOperator": "=",
-          "layerFilterValue": null
+          "layerFilterValue": null,
+          "layerFilterCondition": "AND"
         }
 
         this["retrieved-params"].innerHTML = JSON.stringify(this.config.filterLayerOnLayerVisibilityChange, undefined, 2)
@@ -150,6 +151,11 @@ define(["dojo/_base/declare",
         this["layer-filter-operator"].onchange = function (e) {
           console.log(e)
           self.visibilityTogglingFilterParameters.layerFilterOperator = e.target.value.replace("&lt;", "<").replace('&gt;', ">")
+        }
+
+        this["layer-filter-condition"].onchange = function (e) {
+          console.log(e)
+          self.visibilityTogglingFilterParameters.layerFilterCondition = e.target.value
         }
 
         this["layer-filter-value"].oninput = function (e) {
@@ -267,6 +273,10 @@ define(["dojo/_base/declare",
 
           }
           self["script-list"].appendChild(li)
+
+          self["custom-script-name"].value = ""
+          self["custom-script-content"].value = ""
+
           index++
           console.log("config", self.config)
         }
@@ -288,8 +298,6 @@ define(["dojo/_base/declare",
           self['remove-script'].style.display = "none"
           self["custom-script-name"].value = ""
           self["custom-script-content"].value = ""
-          self["custom-script-name"].innerHTML = ""
-          self["custom-script-content"].innerHTML = ""
 
 
           self["custom-script-type"].removeAttribute('disabled')
@@ -372,6 +380,10 @@ define(["dojo/_base/declare",
 
           }
           self["css-list"].appendChild(li)
+
+          self["custom-css-name"].value = ""
+          self["custom-css-content"].value = ""
+          
           index++
           console.log("config", self.config)
         }
@@ -393,8 +405,6 @@ define(["dojo/_base/declare",
           self['remove-css'].style.display = "none"
           self["custom-css-name"].value = ""
           self["custom-css-content"].value = ""
-          self["custom-css-name"].innerHTML = ""
-          self["custom-css-content"].innerHTML = ""
 
 
         }

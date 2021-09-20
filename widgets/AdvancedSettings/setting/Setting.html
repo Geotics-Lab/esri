@@ -35,6 +35,10 @@
 								<option value="=">=</option>
 								<option value="&lt;&gt;">&lt;&gt;</option>
 							</select>
+							<select data-dojo-attach-point="layer-filter-condition" class="form-select">
+								<option value="AND">AND</option>
+								<option value="OR">OR</option>
+							</select>
 							<input data-dojo-attach-point="layer-filter-value" class="form-control">
 							<span class="badge bg-secondary">
 								<input data-dojo-attach-point="apply-if-visible" type="checkbox"
@@ -42,8 +46,7 @@
 								<span>Apply filter when toggle on</span>
 							</span>
 
-							<button data-dojo-attach-point="add-params" class="btn btn-primary"><i
-									class="bi bi-pencil-square"></i> add parameters</button>
+							<button data-dojo-attach-point="add-params" class="btn btn-primary"><i class="bi bi-node-plus"></i> add</button>
 						</div>
 
 

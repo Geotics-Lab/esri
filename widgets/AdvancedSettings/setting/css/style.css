@@ -45,3 +45,15 @@ textarea{
   display: block;
   margin: 15px auto;
 }
+
+[data-dojo-attach-point="layer-filter-condition"]{
+  width: 100px;
+  display: inline;
+}
+
+[data-dojo-attach-point="filter-layer-on-layer-visibility-change"] .form-control{
+  margin : 5px !important;
+}
+[data-dojo-attach-point="filter-layer-on-layer-visibility-change"]  .form-control{
+  margin : 5px !important;
+}
