@@ -151,8 +151,7 @@ define(["dojo/_base/declare",
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
           var filteredLayer = this.map.getLayer(element.filteredLayerId)
           var filter = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
-          var operator = element.layerFilterCondition
-          element.layerFilter
+          var condition = element.layerFilterCondition
           var applyIfVisible = element.applyIfVisible
 
 
@@ -166,11 +165,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.setDefinitionExpression(filteredLayer, filter, operator)
+                    self.setDefinitionExpression(filteredLayer, filter, condition)
                     break;
 
                   case false:
-                    self.unsetDefinitionExpression(filteredLayer, filter, operator)
+                    self.unsetDefinitionExpression(filteredLayer, filter, condition)
                     break;
                 }
 
@@ -180,11 +179,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.unsetDefinitionExpression(filteredLayer, filter)
+                    self.unsetDefinitionExpression(filteredLayer, filter, condition)
                     break;
 
                   case false:
-                    self.setDefinitionExpression(filteredLayer, filter)
+                    self.setDefinitionExpression(filteredLayer, filter, condition)
                     break;
                 }
 
