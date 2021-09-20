@@ -198,17 +198,17 @@ define(["dojo/_base/declare",
 
       },
 
-      setDefinitionExpression: function (layer, definitionExpression, operator) {
+      setDefinitionExpression: function (layer, definitionExpression, condition) {
         console.log(layer, definitionExpression)
 
         var baseExpressionDefinition = ""
         var operator = ""
-
+        
         if (layer.getDefinitionExpression() != undefined) {
           if (layer.getDefinitionExpression().length > 0) {
 
             var baseExpressionDefinition = layer.getDefinitionExpression()
-            var operator = " " + operator+" "
+            var operator = " " + condition + " "
 
           }
         }
@@ -221,18 +221,18 @@ define(["dojo/_base/declare",
       },
 
 
-      unsetDefinitionExpression: function (layer, definitionExpression, operator) {
+      unsetDefinitionExpression: function (layer, definitionExpression, condition) {
         console.log(layer, definitionExpression)
         console.log(layer.getDefinitionExpression())
 
 
-        if (layer.getDefinitionExpression().includes(definitionExpression + " " + operator + " ")) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + operator + " ", "")
+        if (layer.getDefinitionExpression().includes(definitionExpression + " " + condition + " ")) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + condition + " ", "")
           console.log("replace : x or")
 
         }
-        else if (layer.getDefinitionExpression().includes(" " + operator + " " + definitionExpression)) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(" " + operator + " " + definitionExpression, "")
+        else if (layer.getDefinitionExpression().includes(" " + condition + " " + definitionExpression)) {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(" " + condition + " " + definitionExpression, "")
           console.log("replace : or x")
         }
         else {
