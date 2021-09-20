@@ -288,6 +288,9 @@ define(["dojo/_base/declare",
           self['remove-script'].style.display = "none"
           self["custom-script-name"].value = ""
           self["custom-script-content"].value = ""
+          self["custom-script-name"].innerHTML = ""
+          self["custom-script-content"].innerHTML = ""
+
 
           self["custom-script-type"].removeAttribute('disabled')
           self["custom-script-target"].removeAttribute('disabled')
@@ -390,7 +393,8 @@ define(["dojo/_base/declare",
           self['remove-css'].style.display = "none"
           self["custom-css-name"].value = ""
           self["custom-css-content"].value = ""
-
+          self["custom-css-name"].innerHTML = ""
+          self["custom-css-content"].innerHTML = ""
 
 
         }
