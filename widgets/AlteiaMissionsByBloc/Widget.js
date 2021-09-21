@@ -101,22 +101,22 @@ define(["dojo/_base/declare",
 				var self = this
 
 				for (const key in description) {
-					
-						const element = description[key];
-						
-						var option = document.createElement('option')
 
-						option.innerHTML = key
-						option.value = key
-						option.setAttribute("survey-description", JSON.stringify(element))
+					const element = description[key];
 
-						self["mission-selector"].appendChild(option)
+					var option = document.createElement('option')
+
+					option.innerHTML = key
+					option.value = key
+					option.setAttribute("survey-description", JSON.stringify(element))
+
+					self["mission-selector"].appendChild(option)
 
 				}
 
 			},
 
-			getLatestMission : function (missionsList) {
+			getLatestMission: function (missionsList) {
 
 				var latestMission = null
 				var sortedMissionList = this.getSortedMissionList(missionsList)
@@ -130,13 +130,13 @@ define(["dojo/_base/declare",
 					}
 				});
 
-				
+
 
 
 				return latestMission
 			},
 
-			getSortedMissionList : function (missionList) {
+			getSortedMissionList: function (missionList) {
 				return missionList
 			},
 
@@ -146,24 +146,31 @@ define(["dojo/_base/declare",
 
 			addTiledLayer: function (description) {
 
-				var tilesUrl = description.url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+				if (description == null) {
+					alert("no referenced mission for this block.")
+				}
+				else {
+					var tilesUrl = description.url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
 
-				this.webTiledLayer = new WebTiledLayer(tilesUrl, {
-					"copyright": '',
-					"id": description.name
-				});
-				this.map.addLayer(this.webTiledLayer);
-				this.setLayersDefinitionExpression(description)
+					this.webTiledLayer = new WebTiledLayer(tilesUrl, {
+						"copyright": '',
+						"id": description.name
+					});
+					this.map.addLayer(this.webTiledLayer);
+					this.setLayersDefinitionExpression(description)
 
-				/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
-					var extent = new Extent();
-					extent.xmin = description.real_bbox.bbox[0];
-					extent.ymin = description.real_bbox.bbox[1];
-					extent.xmax = description.real_bbox.bbox[2];
-					extent.ymax = description.real_bbox.bbox[3];
-					extent.spatialReference = spatialRef;
-	
-					this.map.setExtent(extent); */
+					/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
+						var extent = new Extent();
+						extent.xmin = description.real_bbox.bbox[0];
+						extent.ymin = description.real_bbox.bbox[1];
+						extent.xmax = description.real_bbox.bbox[2];
+						extent.ymax = description.real_bbox.bbox[3];
+						extent.spatialReference = spatialRef;
+		
+						this.map.setExtent(extent); */
+				}
+
+
 
 			},
 
