@@ -196,7 +196,7 @@ define(["dojo/_base/declare",
 
           on(filteredLayer, 'update-end', function (e) {
             console.info("resfresh definition expression")
-            this.refreshDefinitionExpression()
+            self.refreshDefinitionExpression()
           })
         });
 
