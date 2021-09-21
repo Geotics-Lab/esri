@@ -121,7 +121,9 @@ define(["dojo/_base/declare",
 				var latestMission = null
 				var sortedMissionList = this.getSortedMissionList(missionsList)
 
-				missionsList.forEach(element => {
+				sortedMissionList.forEach(element => {
+					console.log(element)
+					console.log(this.dateFilterIsValid(new Date(element.date)))
 					if (this.dateFilterIsValid(new Date(element.date))) {
 						return element
 					}
