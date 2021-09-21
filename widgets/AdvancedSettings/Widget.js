@@ -225,7 +225,7 @@ define(["dojo/_base/declare",
         console.log(newDefinitionExpression)
         console.log(layer.getDefinitionExpression())
 
-        this.activeFiltre[layer.id] = {
+        this.activeFiltre[layer.id + definitionExpression] = {
           layer: layer,
           definitionExpression: definitionExpression,
           condition: condition,
@@ -258,7 +258,7 @@ define(["dojo/_base/declare",
         console.log(newDefinitionExpression)
         console.log(layer.getDefinitionExpression())
 
-        delete this.activeFiltre[layer.id]
+        delete this.activeFiltre[layer.id + definitionExpression]
       },
 
 
