@@ -35,6 +35,8 @@ define(["dojo/_base/declare",
         console.log(this)
         var self = this
 
+        this.activeFiltre = {}
+
         for (const key in this.config) {
 
           const parameters = this.config[key];
@@ -71,14 +73,14 @@ define(["dojo/_base/declare",
             case "body":
               var target = document.body
               break;
-          
+
             case "head":
               var target = document.head
               break;
           }
 
 
-          console.log(target , scriptContent)
+          console.log(target, scriptContent)
 
           switch (scriptContent.format) {
             case "src":
@@ -94,7 +96,7 @@ define(["dojo/_base/declare",
 
                 script.setAttribute(attribute.name, attribute.value);
               }
-              
+
               target.appendChild(script);
 
               break;
@@ -150,7 +152,7 @@ define(["dojo/_base/declare",
 
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
           var filteredLayer = this.map.getLayer(element.filteredLayerId)
-          var filter = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
+          var definitionExpression = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
           var condition = element.layerFilterCondition
           var applyIfVisible = element.applyIfVisible
 
@@ -165,11 +167,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.setDefinitionExpression(filteredLayer, filter, condition)
+                    self.setDefinitionExpression(filteredLayer, definitionExpression, condition)
                     break;
 
                   case false:
-                    self.unsetDefinitionExpression(filteredLayer, filter, condition)
+                    self.unsetDefinitionExpression(filteredLayer, definitionExpression, condition)
                     break;
                 }
 
@@ -179,11 +181,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.unsetDefinitionExpression(filteredLayer, filter, condition)
+                    self.unsetDefinitionExpression(filteredLayer, definitionExpression, condition)
                     break;
 
                   case false:
-                    self.setDefinitionExpression(filteredLayer, filter, condition)
+                    self.setDefinitionExpression(filteredLayer, definitionExpression, condition)
                     break;
                 }
 
@@ -191,7 +193,13 @@ define(["dojo/_base/declare",
             }
           })
 
+
         });
+
+
+        setInterval(() => {
+          this.refreshDefinitionExpression()
+        }, 1000);
 
 
 
@@ -202,7 +210,7 @@ define(["dojo/_base/declare",
 
         var baseExpressionDefinition = ""
         var operator = ""
-        
+
         if (layer.getDefinitionExpression() != undefined) {
           if (layer.getDefinitionExpression().length > 0) {
 
@@ -217,13 +225,19 @@ define(["dojo/_base/declare",
         console.log(newDefinitionExpression)
         console.log(layer.getDefinitionExpression())
 
+        this.activeFiltre[layer.id] = {
+          layer: layer,
+          definitionExpression: definitionExpression,
+          condition: condition,
+          newDefinitionExpression: newDefinitionExpression
+        }
+
       },
 
 
       unsetDefinitionExpression: function (layer, definitionExpression, condition) {
         console.log(layer, definitionExpression)
         console.log(layer.getDefinitionExpression())
-
 
         if (layer.getDefinitionExpression().includes(definitionExpression + " " + condition + " ")) {
           var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + condition + " ", "")
@@ -243,6 +257,28 @@ define(["dojo/_base/declare",
         layer.setDefinitionExpression(newDefinitionExpression);
         console.log(newDefinitionExpression)
         console.log(layer.getDefinitionExpression())
+
+        delete this.activeFiltre[layer.id]
+      },
+
+
+      refreshDefinitionExpression: function () {
+
+
+        for (const key in this.activeFiltre) {
+          const filter = this.activeFiltre[key];
+
+
+          if (filter.layer.getDefinitionExpression().includes(filter.definitionExpression)) {
+            console.log("has defexp")
+          }
+          else {
+            console.log("hasnt defexp")
+            this.setDefinitionExpression( filter.layer, filter.definitionExpression,  filter.condition)
+          }
+
+
+        }
       },
 
 
