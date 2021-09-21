@@ -270,7 +270,8 @@ define(["dojo/_base/declare",
 
 
           if (filter.layer.getDefinitionExpression().includes(filter.definitionExpression)) {
-            console.log("has defexp")
+            console.log("has defexp : ", filter.layer.getDefinitionExpression())
+
           }
           else {
             console.log("hasnt defexp")
