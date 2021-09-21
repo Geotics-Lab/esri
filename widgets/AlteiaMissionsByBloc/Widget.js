@@ -47,6 +47,7 @@ define(["dojo/_base/declare",
 				this.surveyDescription = null
 				this.startDate = null
 				this.endDate = null
+				this.selectedIndex = null
 				this.temporaryDefinitionExpression = ""
 
 				this.host = this.config.host
@@ -60,6 +61,7 @@ define(["dojo/_base/declare",
 
 				this["mission-selector"].onchange = function (e) {
 
+					self.selectedIndex = this.value
 					self.surveyDescription = self.getLatestMission(self.blocDescription[this.value])
 					self.clearTiledLayer()
 					self.addTiledLayer(self.surveyDescription)
@@ -72,9 +74,13 @@ define(["dojo/_base/declare",
 					self.clearMissions()
 					self.clearTiledLayer()
 
-					self.surveyDescription = self.getLatestMission(self.blocDescription[this.value])
-					self.clearTiledLayer()
-					self.addTiledLayer(self.surveyDescription)
+					if (self.selectedIndex != null) {
+						
+						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
+						self.clearTiledLayer()
+						self.addTiledLayer(self.surveyDescription)
+					}
+
 
 				}
 
@@ -85,9 +91,14 @@ define(["dojo/_base/declare",
 					self.clearTiledLayer()
 					self.addBlocs(self.blocDescription)
 
-					self.surveyDescription = self.getLatestMission(self.blocDescription[this.value])
-					self.clearTiledLayer()
-					self.addTiledLayer(self.surveyDescription)
+					if (self.selectedIndex != null) {
+
+						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
+						self.clearTiledLayer()
+						self.addTiledLayer(self.surveyDescription)
+					}
+
+
 
 				}
 
