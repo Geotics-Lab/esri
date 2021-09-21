@@ -147,7 +147,7 @@ define(["dojo/_base/declare",
 			addTiledLayer: function (description) {
 
 				if (description == null) {
-					alert("no referenced mission for this block.")
+					alert("no referenced orthomosaic for this block.")
 				}
 				else {
 					var tilesUrl = description.url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
