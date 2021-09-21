@@ -100,9 +100,9 @@ define(["dojo/_base/declare",
 
 				var self = this
 
-				for (const key in object) {
+				for (const key in description) {
 					
-						const element = object[key];
+						const element = description[key];
 						
 						var option = document.createElement('option')
 
