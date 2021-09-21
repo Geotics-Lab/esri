@@ -137,7 +137,16 @@ define(["dojo/_base/declare",
 			},
 
 			getSortedMissionList: function (missionList) {
-				return missionList
+
+				var sortedMissionList = missionList.sort(function (a, b) {
+					var c = new Date(a.date);
+					var d = new Date(b.date);
+					return c - d;
+				});
+
+				return sortedMissionList
+
+
 			},
 
 			clearMissions: function () {
