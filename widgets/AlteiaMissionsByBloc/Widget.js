@@ -125,7 +125,8 @@ define(["dojo/_base/declare",
 					console.log(element)
 					console.log(this.dateFilterIsValid(new Date(element.date)))
 					if (this.dateFilterIsValid(new Date(element.date))) {
-						return element
+						latestMission = element
+						return
 					}
 				});
 
