@@ -141,7 +141,7 @@ define(["dojo/_base/declare",
 			},
 
 			clearMissions: function () {
-				this["mission-selector"].innerHTML = "<option>Mission</option>"
+				this["mission-selector"].innerHTML = "<option>Block</option>"
 			},
 
 			addTiledLayer: function (description) {
