@@ -17,10 +17,10 @@
 ///////////////////////////////////////////////////////////////////////////
 define(["dojo/_base/declare",
   "jimu/BaseWidget",
-  "dijit/_WidgetsInTemplateMixin",  
+  "dijit/_WidgetsInTemplateMixin",
   'dojo/on'
 ],
-  function (declare, BaseWidget, _WidgetsInTemplateMixin,on) {
+  function (declare, BaseWidget, _WidgetsInTemplateMixin, on) {
     return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
       name: "AdvencedSettings",
@@ -35,9 +35,9 @@ define(["dojo/_base/declare",
         console.log(this)
         var self = this
 
-       this.activeFiltre = {}
-        
-      
+        this.activeFiltre = {}
+
+
 
         for (const key in this.config) {
 
@@ -190,20 +190,34 @@ define(["dojo/_base/declare",
             }
 
 
-            
-            
+
+
           })
 
           on(filteredLayer, 'update-end', function (e) {
             console.info("resfresh definition expression")
             self.refreshDefinitionExpression()
+
+
+            repetitionCount = 0
+            var interval = setInterval(() => {
+
+              console.log("interval")
+              self.refreshDefinitionExpression()
+
+              if (repetitionCount > 10) {
+                clearInterval(interval)
+              }
+
+              repetitionCount++
+            }, 500);
           })
         });
 
 
-    /*     setInterval(() => {
-          this.refreshDefinitionExpression()
-        }, 1000); */
+        /*     setInterval(() => {
+              this.refreshDefinitionExpression()
+            }, 1000); */
 
 
 
@@ -239,7 +253,7 @@ define(["dojo/_base/declare",
 
 
       unsetDefinitionExpression: function (layer, definitionExpression, condition) {
- 
+
         if (layer.getDefinitionExpression().includes(definitionExpression + " " + condition + " ")) {
           var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + condition + " ", "")
         }
@@ -263,7 +277,7 @@ define(["dojo/_base/declare",
           const filter = this.activeFiltre[key];
 
           if (!filter.layer.getDefinitionExpression().includes(filter.definitionExpression)) {
-            this.setDefinitionExpression( filter.layer, filter.definitionExpression,  filter.condition)
+            this.setDefinitionExpression(filter.layer, filter.definitionExpression, filter.condition)
           }
 
         }
