@@ -14,24 +14,25 @@
 // limitations under the License.
 ///////////////////////////////////////////////////////////////////////////
 define(["dojo/_base/declare",
-    "dojo/_base/lang",
-    "dojo/query",
-    "dojo/dom-class",
-    "dojo/dom-construct",
-    "jimu/BaseWidgetSetting",
-    "dijit/_WidgetsInTemplateMixin",
-    "dijit/form/Form",
-    "jimu/dijit/CheckBox",
-    "dijit/form/NumberTextBox",
-    "dijit/form/ValidationTextBox"
-  ],
-  function(declare, lang, query, domClass, domConstruct,
+  'jimu/LayerInfos/LayerInfos',
+  "dojo/_base/lang",
+  "dojo/query",
+  "dojo/dom-class",
+  "dojo/dom-construct",
+  "jimu/BaseWidgetSetting",
+  "dijit/_WidgetsInTemplateMixin",
+  "dijit/form/Form",
+  "jimu/dijit/CheckBox",
+  "dijit/form/NumberTextBox",
+  "dijit/form/ValidationTextBox"
+],
+  function (declare, LayerInfos, lang, query, domClass, domConstruct,
     BaseWidgetSetting, _WidgetsInTemplateMixin) {
 
     return declare([BaseWidgetSetting, _WidgetsInTemplateMixin], {
 
       baseClass: "jimu-widget-add-data-setting",
-  
+
 
 
       postCreate: function () {
@@ -47,10 +48,12 @@ define(["dojo/_base/declare",
           return;
         }
         this.inherited(arguments);
+        this.layerInfos = LayerInfos.getInstanceSync()._layerInfos;
         this.setConfig(this.config);
         var self = this;
 
-        this["config-layer"].value = JSON.stringify(this.config.layers)
+
+
 
 
         if (this.config.filterAction == true) {
@@ -59,9 +62,9 @@ define(["dojo/_base/declare",
         if (this.config.zoomAction == true) {
           this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
         }
-        
-       
-        
+
+
+
 
         this["config-layer"].onchange = function (params) {
           self.config.layers = JSON.parse(self["config-layer"].value)
@@ -76,6 +79,156 @@ define(["dojo/_base/declare",
         this["zoom-map-setter"].onchange = function (params) {
           self.config.zoomAction = this.checked
           console.log(self.config)
+        }
+
+
+
+
+
+
+        
+
+
+        this["config-layer"].value = JSON.stringify(this.config.layers, null, "\t")
+
+
+        this.layerInfos.forEach(element => {
+
+          var optionClickLayer = document.createElement('option')
+
+          optionClickLayer.innerHTML = element.title
+
+          optionClickLayer.value = element.layerObject.url
+      
+
+          this["select-layer-id"].appendChild(optionClickLayer)
+
+
+        });
+
+
+        this["select-layer-add"].onclick = function (e) {
+
+
+          self.config.layers.push({
+            "url": self["select-layer-id"].value,
+            "surveyTileField": self["select-layer-field-ortho"].value,
+            "surveyNameField": self["select-layer-field-name"].value,
+            "surveyDateField": self["select-layer-field-date"].value,
+            "blocField": self["select-layer-field-bloc"].value
+          })
+
+          self["config-layer"].value = JSON.stringify(self.config.layers, null, "\t")
+
+        }
+
+        this["select-layer-id"].onchange = function (e) {
+
+          self.layerInfos.forEach(element => {
+
+            console.log(element.layerObject.url , e.target.value)
+            if (element.layerObject.url == e.target.value) {
+
+              var fields = element.layerObject._fields
+              console.log(element.layerObject._fields.target)
+              console.log(element.layerObject._fields)
+
+              for (const key in fields) {
+                const field = fields[key];
+
+                var option = document.createElement('option')
+                option.innerHTML = field.alias
+                option.value = field.name
+
+                self["select-layer-field-ortho"].appendChild(option)
+
+                var option2 = document.createElement('option')
+                option2.innerHTML = field.alias
+                option2.value = field.name
+
+                self["select-layer-field-date"].appendChild(option2)
+
+                var option3 = document.createElement('option')
+                option3.innerHTML = field.alias
+                option3.value = field.name
+
+                self["select-layer-field-name"].appendChild(option3)
+
+                var option4 = document.createElement('option')
+                option4.innerHTML = field.alias
+                option4.value = field.name
+
+                self["select-layer-field-bloc"].appendChild(option4)
+
+              }
+
+            }
+
+          });
+
+        }
+
+
+
+
+
+
+        if(!this.config.hasOwnProperty("clickLayer")){
+          this.config.clickLayer = []
+        }
+
+        this["config-click"].value = JSON.stringify(this.config.clickLayer, null, "\t")
+
+        this.layerInfos.forEach(element => {
+
+          var optionClickLayer = document.createElement('option')
+
+          optionClickLayer.innerHTML = element.title
+
+          optionClickLayer.value = element.id
+
+          this["click-layer-id"].appendChild(optionClickLayer)
+
+
+        });
+
+        this["click-layer-add"].onclick = function (e) {
+
+
+          self.config.clickLayer.push({
+              "layerId" : self["click-layer-id"].value,
+              "orthoField" : self["click-layer-field"].value
+          })
+
+          self["config-click"].value = JSON.stringify(self.config.clickLayer, null, "\t")
+
+        }
+
+        this["click-layer-id"].onchange = function (e) {
+
+          self.layerInfos.forEach(element => {
+
+            if (element.id == e.target.value) {
+
+              var fields = element.layerObject._fields
+              console.log(element.layerObject._fields.target)
+              console.log(element.layerObject._fields)
+
+              for (const key in fields) {
+                const field = fields[key];
+
+                var option = document.createElement('option')
+                option.innerHTML = field.alias
+                option.value = field.name
+
+                self["click-layer-field"].appendChild(option)
+
+              }
+
+            }
+
+          });
+
         }
 
       },

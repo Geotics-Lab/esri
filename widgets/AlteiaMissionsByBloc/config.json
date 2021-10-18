@@ -23,5 +23,8 @@
       "surveyDateField" : "surv_date",
       "blocField" : ""
     }
+  ],
+  "clickLayer": [
+    
   ]
 }

@@ -1,4 +1,3 @@
-
 <div>
 	<div>
 		<span>Filter map</span>
@@ -8,8 +7,40 @@
 		<span>Zoom on layers</span>
 		<input data-dojo-attach-point='zoom-map-setter' type="checkbox"></input>
 	</div>
+
+	<br><br>
 	<div>
+		<span>Select</span>
+		<select data-dojo-attach-point="select-layer-id">
+			<option>select layer</option>
+		</select>
+		<select data-dojo-attach-point="select-layer-field-ortho">
+			<option>select ortho field</option>
+		</select>
+		<select data-dojo-attach-point="select-layer-field-date">
+			<option>select date field</option>
+		</select>
+		<select data-dojo-attach-point="select-layer-field-name">
+			<option>select ortho field</option>
+		</select>
+		<select data-dojo-attach-point="select-layer-field-bloc">
+			<option>select date field</option>
+		</select>
+		<button data-dojo-attach-point="select-layer-add">Add</button>
 		<textarea data-dojo-attach-point="config-layer" style="width: 100%; height: 300px;"></textarea>
 	</div>
-	
+	<br><br>
+	<div>
+		<span>Click</span>
+		<select data-dojo-attach-point="click-layer-id">
+			<option>select layer</option>
+		</select>
+		<select data-dojo-attach-point="click-layer-field">
+			<option>select ortho field</option>
+		</select>
+		
+		<button data-dojo-attach-point="click-layer-add">Add</button>
+		<textarea data-dojo-attach-point="config-click" style="width: 100%; height: 300px;"></textarea>
+
+	</div>
 </div>

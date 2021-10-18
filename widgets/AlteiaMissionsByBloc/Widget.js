@@ -52,6 +52,48 @@ define(["dojo/_base/declare",
 
 				this.host = this.config.host
 
+				if (this.config.clickLayer.length > 0) {
+
+
+					this.config.clickLayer.forEach(layerInfo => {
+						var layer = self.map.getLayer(layerInfo.layerId)
+
+						layer.on("click", function (e) {
+							if (self["get-by-click"].checked == true) {
+
+								
+								self.config.clickLayer.forEach(element => {
+									if (element.layerId == e.graphic._layer.id) {
+
+										console.log(("add tiles : "), e.graphic.attributes[element.orthoField])
+										var url = e.graphic.attributes[element.orthoField]
+										
+										self.clearTiledLayer()
+										var tilesUrl = url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+
+										self.webTiledLayer = new WebTiledLayer(tilesUrl, {
+											"copyright": '',
+											"id": "Alteia tiles"
+										});
+										self.map.addLayer(self.webTiledLayer);
+									}
+								});
+
+							}
+							else {
+								console.log(("no"))
+							}
+						})
+					});
+
+
+
+				}
+				else {
+					this["mission-by-click"].style.display = "none"
+				}
+
+
 
 
 				self.getMissionsDescription().then(function (description) {
@@ -75,7 +117,7 @@ define(["dojo/_base/declare",
 					self.clearTiledLayer()
 
 					if (self.selectedIndex != null) {
-						
+
 						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
 						self.clearTiledLayer()
 						self.addTiledLayer(self.surveyDescription)
