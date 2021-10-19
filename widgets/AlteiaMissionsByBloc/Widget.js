@@ -65,7 +65,8 @@ define(["dojo/_base/declare",
 								self.config.clickLayer.forEach(element => {
 									if (element.layerId == e.graphic._layer.id) {
 
-										console.log(("add tiles : "), e.graphic.attributes[element.orthoField])
+										
+
 										var url = e.graphic.attributes[element.orthoField]
 										
 										self.clearTiledLayer()
@@ -73,18 +74,31 @@ define(["dojo/_base/declare",
 
 										self.webTiledLayer = new WebTiledLayer(tilesUrl, {
 											"copyright": '',
-											"id": "Alteia tiles"
+											"id": "Alteia Orthomosaic"
 										});
 										self.map.addLayer(self.webTiledLayer);
 									}
 								});
 
 							}
-							else {
-								console.log(("no"))
-							}
+							
 						})
 					});
+
+					this["get-by-click"].onchange = function (e) {
+
+						if (self["get-by-click"].checked == true) {
+
+							//document.getElementById("map").style.cursor = "crosshair"
+	
+						}
+						else {
+							//document.getElementById("map").style.cursor = "none"
+						}
+						
+					}
+
+					
 
 
 
@@ -216,7 +230,7 @@ define(["dojo/_base/declare",
 
 					this.webTiledLayer = new WebTiledLayer(tilesUrl, {
 						"copyright": '',
-						"id": description.name
+						"id": "Alteia Orthomosaic"//description.name
 					});
 					this.map.addLayer(this.webTiledLayer);
 					this.setLayersDefinitionExpression(description)
