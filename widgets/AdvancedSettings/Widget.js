@@ -119,7 +119,7 @@ define(["dojo/_base/declare",
       },
 
       setDefinitionExpression: function (layers, definitionExpression) {
-        console.log(layer, definitionExpression)
+        console.log(layers, definitionExpression)
 
 
         layers.forEach(layer => {
@@ -144,7 +144,7 @@ define(["dojo/_base/declare",
 
 
 
-        console.log(layer, definitionExpression)
+        console.log(layers, definitionExpression)
 
         layers.forEach(layer => {
           
