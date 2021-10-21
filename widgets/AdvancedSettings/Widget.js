@@ -12,19 +12,22 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-
 ///////////////////////////////////////////////////////////////////////////
 define(["dojo/_base/declare",
+  "dojo/_base/lang",
+  "dojo/on",
+  "esri/layers/WebTiledLayer",
+  "esri/geometry/Extent",
+  "esri/SpatialReference",
   "jimu/BaseWidget",
   "dijit/_WidgetsInTemplateMixin",
-  'dojo/on'
+  "dojo/_base/array"
 ],
-  function (declare, BaseWidget, _WidgetsInTemplateMixin, on) {
+  function (declare, lang, on, WebTiledLayer, Extent, SpatialReference, BaseWidget, _WidgetsInTemplateMixin, array) {
     return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
-      name: "AdvencedSettings",
-      baseClass: "jimu-widget-advanced-settings",
+      name: "AddData",
+      baseClass: "jimu-widget-add-data",
 
       postCreate: function () {
         this.inherited(arguments);
@@ -35,10 +38,6 @@ define(["dojo/_base/declare",
         console.log(this)
         var self = this
 
-        this.activeFiltre = {}
-
-
-
         for (const key in this.config) {
 
           const parameters = this.config[key];
@@ -47,97 +46,12 @@ define(["dojo/_base/declare",
             case "filterLayerOnLayerVisibilityChange":
               this.filterLayerOnLayerVisibilityChange(parameters)
               break;
-            case "customScript":
-              this.AddCustomScript(parameters)
-              break;
-            case "customCss":
-              this.AddCustomCss(parameters)
-              break;
 
 
           }
 
 
         }
-
-
-      },
-
-
-
-      AddCustomScript: function (scriptList) {
-
-
-        scriptList.forEach(scriptContent => {
-
-
-          switch (scriptContent.target) {
-            case "body":
-              var target = document.body
-              break;
-
-            case "head":
-              var target = document.head
-              break;
-          }
-
-
-          switch (scriptContent.format) {
-            case "src":
-              var script = document.createElement('script');
-              var test_element = document.createElement('div');
-              test_element.innerHTML = scriptContent.content;
-
-              var element = test_element.childNodes[0];
-              var attributes = element.attributes;
-
-              for (var i = 0; i < attributes.length; i++) {
-                var attribute = attributes[i];
-
-                script.setAttribute(attribute.name, attribute.value);
-              }
-
-              target.appendChild(script);
-
-              break;
-
-            case "text":
-              var script = document.createElement('script');
-              script.type = 'text/javascript';
-              script.innerHTML = scriptContent.content
-              target.appendChild(script);
-              break;
-          }
-
-
-
-          //document.head.appendChild(createElementFromHTML(scriptContent.content))
-
-        });
-
-
-        function createElementFromHTML(htmlString) {
-          var div = document.createElement('div');
-          div.innerHTML = htmlString.trim();
-
-          return div.firstChild;
-        }
-
-
-      },
-
-      AddCustomCss: function (cssList) {
-
-
-        cssList.forEach(cssContent => {
-
-          var styleSheet = document.createElement("style")
-          styleSheet.type = "text/css"
-          styleSheet.innerText = cssContent.content
-          document.head.appendChild(styleSheet)
-
-        });
-
 
 
       },
@@ -148,15 +62,23 @@ define(["dojo/_base/declare",
 
         parameters.forEach(element => {
 
+          console.log(element)
+
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
-          var filteredLayer = this.map.getLayer(element.filteredLayerId)
-          var definitionExpression = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
-          var condition = element.layerFilterCondition
+
+          var filteredLayers = []
+          element.filteredLayerId.forEach(filteredLayerUid => {
+            filteredLayers.push(this.map.getLayer(filteredLayerUid))
+          });
+          
+          var filter = element.layerFilterField+ element.layerFilterOperator +element.layerFilterValue
+          
           var applyIfVisible = element.applyIfVisible
 
 
 
           visibilityLayer.on("visibility-change", function (e) {
+            console.log(e)
 
             switch (applyIfVisible) {
 
@@ -164,11 +86,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.setDefinitionExpression(filteredLayer, definitionExpression, condition)
+                    self.setDefinitionExpression(filteredLayers, filter)
                     break;
 
                   case false:
-                    self.unsetDefinitionExpression(filteredLayer, definitionExpression, condition)
+                    self.unsetDefinitionExpression(filteredLayers, filter)
                     break;
                 }
 
@@ -178,109 +100,72 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.unsetDefinitionExpression(filteredLayer, definitionExpression, condition)
+                    self.unsetDefinitionExpression(filteredLayer, filter)
                     break;
 
                   case false:
-                    self.setDefinitionExpression(filteredLayer, definitionExpression, condition)
+                    self.setDefinitionExpression(filteredLayer, filter)
                     break;
                 }
 
                 break;
             }
-
-
-
-
           })
 
-          on(filteredLayer, 'update-end', function (e) {
-            console.info("resfresh definition expression")
-            self.refreshDefinitionExpression()
-
-
-            repetitionCount = 0
-            var interval = setInterval(() => {
-
-              console.log("interval")
-              self.refreshDefinitionExpression()
-
-              if (repetitionCount > 10) {
-                clearInterval(interval)
-              }
-
-              repetitionCount++
-            }, 500);
-          })
         });
 
 
-        /*     setInterval(() => {
-              this.refreshDefinitionExpression()
-            }, 1000); */
-
-
 
       },
 
-      setDefinitionExpression: function (layer, definitionExpression, condition) {
+      setDefinitionExpression: function (layers, definitionExpression) {
         console.log(layer, definitionExpression)
 
-        var baseExpressionDefinition = ""
-        var operator = ""
 
-        if (layer.getDefinitionExpression() != undefined) {
-          if (layer.getDefinitionExpression().length > 0) {
-
-            var baseExpressionDefinition = layer.getDefinitionExpression()
-            var operator = " " + condition + " "
-
+        layers.forEach(layer => {
+          var baseExpressionDefinition = ""
+          var operator = ""
+          if (layer.getDefinitionExpression() != undefined) {
+            if (layer.getDefinitionExpression().length > 0) {
+  
+            }
           }
-        }
+  
+          var newDefinitionExpression = baseExpressionDefinition + operator + definitionExpression
+          layer.setDefinitionExpression(newDefinitionExpression);
+          console.log(newDefinitionExpression)
+          console.log(layer.getDefinitionExpression())
+        });
 
-        var newDefinitionExpression = baseExpressionDefinition + operator + definitionExpression
-        layer.setDefinitionExpression(newDefinitionExpression);
-
-
-        this.activeFiltre[layer.id + definitionExpression] = {
-          layer: layer,
-          definitionExpression: definitionExpression,
-          condition: condition,
-          newDefinitionExpression: newDefinitionExpression
-        }
+       
 
       },
+      unsetDefinitionExpression: function (layers, definitionExpression) {
 
 
-      unsetDefinitionExpression: function (layer, definitionExpression, condition) {
 
-        if (layer.getDefinitionExpression().includes(definitionExpression + " " + condition + " ")) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + condition + " ", "")
+        console.log(layer, definitionExpression)
+
+        layers.forEach(layer => {
+          
+        try {
+          var newDefinitionExpression = layer.getDefinitionExpression().replace(" AND " + definitionExpression, "")
+
+        } catch (error) {
+
         }
-        else if (layer.getDefinitionExpression().includes(" " + condition + " " + definitionExpression)) {
-          var newDefinitionExpression = layer.getDefinitionExpression().replace(" " + condition + " " + definitionExpression, "")
-        }
-        else {
+        try {
           var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression, "")
+
+        } catch (error) {
+
         }
-
-
         layer.setDefinitionExpression(newDefinitionExpression);
-        delete this.activeFiltre[layer.id + definitionExpression]
-      },
+        console.log(newDefinitionExpression)
+        console.log(layer.getDefinitionExpression())
+        });
 
 
-      refreshDefinitionExpression: function () {
-
-
-        for (const key in this.activeFiltre) {
-          const filter = this.activeFiltre[key];
-
-          if (!filter.layer.getDefinitionExpression().includes(filter.definitionExpression)) {
-            this.setDefinitionExpression(filter.layer, filter.definitionExpression, filter.condition)
-          }
-
-        }
       },
 
 
