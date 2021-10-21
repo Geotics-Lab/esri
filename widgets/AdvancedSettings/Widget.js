@@ -100,11 +100,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.unsetDefinitionExpression(filteredLayer, filter)
+                    self.unsetDefinitionExpression(filteredLayers, filter)
                     break;
 
                   case false:
-                    self.setDefinitionExpression(filteredLayer, filter)
+                    self.setDefinitionExpression(filteredLayers, filter)
                     break;
                 }
 
