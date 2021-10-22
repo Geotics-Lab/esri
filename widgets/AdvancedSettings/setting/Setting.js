@@ -49,7 +49,7 @@ define(["dojo/_base/declare",
           self.setCustomCss()
 
           
-        this['import-config'].onchange = function (e) {
+        self['import-config'].onchange = function (e) {
           var files = document.getElementById('import-config').files;
           console.log(files);
           if (files.length <= 0) {
@@ -68,7 +68,7 @@ define(["dojo/_base/declare",
           fr.readAsText(files.item(0));
           
         }
-        this['export-config'].onclick = function (e) {
+        self['export-config'].onclick = function (e) {
           var saveData = (function () {
             var a = document.createElement("a");
             // document.body.appendChild(a);
