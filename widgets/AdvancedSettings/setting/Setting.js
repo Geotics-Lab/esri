@@ -48,6 +48,46 @@ define(["dojo/_base/declare",
           self.setCustomScript()
           self.setCustomCss()
 
+          
+        this['import-config'].onchange = function (e) {
+          var files = document.getElementById('import-config').files;
+          console.log(files);
+          if (files.length <= 0) {
+            return false;
+          }
+        
+          var fr = new FileReader();
+        
+          fr.onload = function(e) { 
+          console.log(e);
+            var result = JSON.parse(e.target.result);
+            console.log(result)
+            self.config = result
+          }
+        
+          fr.readAsText(files.item(0));
+          
+        }
+        this['export-config'].onclick = function (e) {
+          var saveData = (function () {
+            var a = document.createElement("a");
+            // document.body.appendChild(a);
+            // a.style = "display: none";
+            return function (data, fileName) {
+                var json = JSON.stringify(data),
+                    blob = new Blob([json], {type: "octet/stream"}),
+                    url = window.URL.createObjectURL(blob);
+                a.href = url;
+                a.download = fileName;
+                a.click();
+                window.URL.revokeObjectURL(url);
+            };
+            }());
+            
+    
+            saveData(self.config, "config.json");
+        }
+
         })
       },
 
