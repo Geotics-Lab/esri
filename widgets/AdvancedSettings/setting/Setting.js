@@ -101,6 +101,7 @@ define(["dojo/_base/declare",
           "filteredLayerId": [],
           "layerFilterField": null,
           "layerFilterOperator": "=",
+          "layerFilterCondition" : "AND",
           "layerFilterValue": null
         }
 
@@ -122,6 +123,11 @@ define(["dojo/_base/declare",
 
 
         });
+
+        this["layer-filter-condition"].onchange = function (e) {
+          console.log(e)
+          self.visibilityTogglingFilterParameters.layerFilterCondition = e.target.value
+        }
 
         this["visibility-layer-id"].onchange = function (e) {
           console.log(e)
