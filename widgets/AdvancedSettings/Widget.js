@@ -217,20 +217,23 @@ define(["dojo/_base/declare",
 
       },
 
-      setDefinitionExpression: function (layers, definitionExpression, condition) {
+      setDefinitionExpression: function (layers, definitionExpression, condition, operator) {
         console.log(layers, definitionExpression)
 
         layers.forEach(layer => {
 
           var baseExpressionDefinition = ""
-          var operator = ""
+
 
           if (layer.getDefinitionExpression() != undefined) {
             if (layer.getDefinitionExpression().length > 0) {
 
               var baseExpressionDefinition = layer.getDefinitionExpression()
-              var operator = " " + condition + " "
+              //var operator = " " + condition + " "
 
+            }
+            else {
+              operator = ""
             }
           }
 
