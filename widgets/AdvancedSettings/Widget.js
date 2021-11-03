@@ -131,33 +131,39 @@ define(["dojo/_base/declare",
         var self = this
 
         parameters.forEach(element => {
+          
           console.info(element)
 
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
-          var definitionExpression = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
-          var condition = element.layerFilterCondition
-          var applyIfVisible = element.applyIfVisible
-          var filteredLayers = []
+
+          visibilityLayer.filteringParameters = {
+            definitionExpression: element.layerFilterField + element.layerFilterOperator + element.layerFilterValue,
+            condition : element.layerFilterCondition,
+            applyIfVisible : element.applyIfVisible, 
+            filteredLayers : []
+          }
 
           element.filteredLayerId.forEach(filteredLayerUid => {
-            filteredLayers.push(this.map.getLayer(filteredLayerUid))
+            visibilityLayer.filteringParameters.filteredLayers.push(this.map.getLayer(filteredLayerUid))
           });
 
 
 
           visibilityLayer.on("visibility-change", function (e) {
 
-            switch (applyIfVisible) {
+            console.warn(this)
+
+            switch (visibilityLayer.filteringParameters.applyIfVisible) {
 
               case true:
 
                 switch (e.visible) {
                   case true:
-                    self.setDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    self.setDefinitionExpression(visibilityLayer.filteringParameters.filteredLayers, visibilityLayer.filteringParameters.definitionExpression, visibilityLayer.filteringParameters.condition)
                     break;
 
                   case false:
-                    self.unsetDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    self.unsetDefinitionExpression(visibilityLayer.filteringParameters.filteredLayers, visibilityLayer.filteringParameters.definitionExpression, visibilityLayer.filteringParameters.condition)
                     break;
                 }
 
@@ -167,11 +173,11 @@ define(["dojo/_base/declare",
 
                 switch (e.visible) {
                   case true:
-                    self.unsetDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    self.unsetDefinitionExpression(visibilityLayer.filteringParameters.filteredLayers, visibilityLayer.filteringParameters.definitionExpression, visibilityLayer.filteringParameters.condition)
                     break;
 
                   case false:
-                    self.setDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    self.setDefinitionExpression(visibilityLayer.filteringParameters.filteredLayers, visibilityLayer.filteringParameters.definitionExpression, visibilityLayer.filteringParameters.condition)
                     break;
                 }
 
