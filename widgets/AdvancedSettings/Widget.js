@@ -1,4 +1,3 @@
-
 define(["dojo/_base/declare",
   "jimu/BaseWidget",
   "dijit/_WidgetsInTemplateMixin",
@@ -16,6 +15,7 @@ define(["dojo/_base/declare",
 
       startup: function () {
 
+        console.log(this)
         var self = this
 
         this.activeFiltre = {}
@@ -130,6 +130,8 @@ define(["dojo/_base/declare",
         var self = this
 
         parameters.forEach(element => {
+          
+          console.info(element)
 
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
 
@@ -147,6 +149,8 @@ define(["dojo/_base/declare",
 
 
           visibilityLayer.on("visibility-change", function (e) {
+
+            console.warn(this)
 
             switch (visibilityLayer.filteringParameters.applyIfVisible) {
 
@@ -195,6 +199,7 @@ define(["dojo/_base/declare",
               repetitionCount = 0
               var interval = setInterval(() => {
 
+                console.log("interval")
                 self.refreshDefinitionExpression()
 
                 if (repetitionCount > 10) {
@@ -219,6 +224,7 @@ define(["dojo/_base/declare",
       },
 
       setDefinitionExpression: function (layers, definitionExpression, condition) {
+        console.log(layers, definitionExpression)
 
         layers.forEach(layer => {
 
@@ -236,6 +242,7 @@ define(["dojo/_base/declare",
 
           var newDefinitionExpression = baseExpressionDefinition + operator + definitionExpression
           layer.setDefinitionExpression(newDefinitionExpression);
+          console.log("set new defex", newDefinitionExpression)
 
           this.activeFiltre[layer.id + definitionExpression] = {
             layer: layer,
@@ -264,7 +271,8 @@ define(["dojo/_base/declare",
           else {
             var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression, "")
           }
-          
+
+          console.log("unsetdefexp", newDefinitionExpression)
           layer.setDefinitionExpression(newDefinitionExpression);
           delete this.activeFiltre[layer.id + definitionExpression]
 
@@ -275,7 +283,8 @@ define(["dojo/_base/declare",
 
 
       refreshDefinitionExpression: function () {
-        
+
+        console.log(this.activeFiltre)
 
         for (const key in this.activeFiltre) {
           const filter = this.activeFiltre[key];
@@ -307,4 +316,3 @@ define(["dojo/_base/declare",
     });
 
   });
-
