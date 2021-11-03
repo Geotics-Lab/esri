@@ -52,6 +52,67 @@ define(["dojo/_base/declare",
 
 				this.host = this.config.host
 
+				this.tryToEnableClickLayer()
+
+
+
+
+				self.getMissionsDescription().then(function (description) {
+					self.blocDescription = description
+					self.addBlocs(self.blocDescription)
+				})
+
+				this["mission-selector"].onchange = function (e) {
+
+					self.selectedIndex = this.value
+					self.surveyDescription = self.getLatestMission(self.blocDescription[this.value])
+					self.clearTiledLayer()
+					self.addTiledLayer(self.surveyDescription)
+
+				}
+
+				this["start-date"].onchange = function (e) {
+
+					self.startDate = new Date(this.value)
+					self.clearMissions()
+					self.clearTiledLayer()
+
+					if (self.selectedIndex != null) {
+
+						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
+						self.clearTiledLayer()
+						self.addTiledLayer(self.surveyDescription)
+					}
+
+
+				}
+
+				this["end-date"].onchange = function (e) {
+
+					self.endDate = new Date(this.value)
+					self.clearMissions()
+					self.clearTiledLayer()
+					self.addBlocs(self.blocDescription)
+
+					if (self.selectedIndex != null) {
+
+						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
+						self.clearTiledLayer()
+						self.addTiledLayer(self.surveyDescription)
+					}
+
+
+
+				}
+
+
+			},
+
+
+			tryToEnableClickLayer : function () {
+
+				var self = this
+
 				if (this.config.clickLayer.length > 0) {
 
 
@@ -106,59 +167,49 @@ define(["dojo/_base/declare",
 				else {
 					this["mission-by-click"].style.display = "none"
 				}
+			},
+
+			tryToEnableClickJoinLayer : function () {
+
+				var self = this
+				if (this.config.clickJoinLayer.length > 0) {
 
 
+					this.config.clickJoinLayer.forEach(layerInfo => {
+						var layer = self.map.getLayer(layerInfo.layerId)
 
+						layer.on("click", function (e) {
+							if (self["get-by-click-join"].checked == true) {
 
-				self.getMissionsDescription().then(function (description) {
-					self.blocDescription = description
-					self.addBlocs(self.blocDescription)
-				})
+								
+								self.config.clickJoinLayer.forEach(element => {
+									if (element.layerId == e.graphic._layer.id) {
 
-				this["mission-selector"].onchange = function (e) {
+										
 
-					self.selectedIndex = this.value
-					self.surveyDescription = self.getLatestMission(self.blocDescription[this.value])
-					self.clearTiledLayer()
-					self.addTiledLayer(self.surveyDescription)
+										var joinValue = e.graphic.attributes[element.joinField]
+										
+										self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function(result) {
+											console.log(result)
+										})
+									}
+								});
 
-				}
+							}
+							
+						})
+					});
 
-				this["start-date"].onchange = function (e) {
+				
 
-					self.startDate = new Date(this.value)
-					self.clearMissions()
-					self.clearTiledLayer()
-
-					if (self.selectedIndex != null) {
-
-						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
-						self.clearTiledLayer()
-						self.addTiledLayer(self.surveyDescription)
-					}
-
-
-				}
-
-				this["end-date"].onchange = function (e) {
-
-					self.endDate = new Date(this.value)
-					self.clearMissions()
-					self.clearTiledLayer()
-					self.addBlocs(self.blocDescription)
-
-					if (self.selectedIndex != null) {
-
-						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
-						self.clearTiledLayer()
-						self.addTiledLayer(self.surveyDescription)
-					}
+					
 
 
 
 				}
-
-
+				else {
+					this["mission-by-click-join"].style.display = "none"
+				}
 			},
 
 
@@ -339,6 +390,29 @@ define(["dojo/_base/declare",
 					})
 
 				});
+			},
+
+
+
+			getJoinnedFeature: function (url, field, value) {
+
+				var self = this
+				return new Promise((resolve, reject) => {
+
+				featureLayer = new FeatureLayer(url)
+
+				query = new Query();
+
+
+				query.outFields = ["*"];
+				query.where = field + "=" + value
+
+				featureLayer.queryExtent(query, function (result) {
+					resolve(result)
+					
+
+				});
+			})
 			},
 
 			clearTiledLayer: function () {
