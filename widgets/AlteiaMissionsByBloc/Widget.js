@@ -408,7 +408,7 @@ define(["dojo/_base/declare",
 				query.outFields = ["*"];
 				query.where = field + "='" + value + "'"
 
-				featureLayer.queryExtent(query, function (result) {
+				featureLayer.queryFeatures(query, function (result) {
 					resolve(result)
 					
 
