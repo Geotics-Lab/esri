@@ -131,6 +131,7 @@ define(["dojo/_base/declare",
         var self = this
 
         parameters.forEach(element => {
+          console.info(element)
 
           var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
           var definitionExpression = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
@@ -217,23 +218,20 @@ define(["dojo/_base/declare",
 
       },
 
-      setDefinitionExpression: function (layers, definitionExpression, condition, operator) {
+      setDefinitionExpression: function (layers, definitionExpression, condition) {
         console.log(layers, definitionExpression)
 
         layers.forEach(layer => {
 
           var baseExpressionDefinition = ""
-
+          var operator = ""
 
           if (layer.getDefinitionExpression() != undefined) {
             if (layer.getDefinitionExpression().length > 0) {
 
               var baseExpressionDefinition = layer.getDefinitionExpression()
-              //var operator = " " + condition + " "
+              var operator = " " + condition + " "
 
-            }
-            else {
-              operator = ""
             }
           }
 
