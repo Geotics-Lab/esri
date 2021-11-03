@@ -241,7 +241,7 @@ define(["dojo/_base/declare",
 
 
         this["config-join-click"].onchange = function (e) {
-          this.config.clickJoinLayer = JSON.parse(this["config-join-click"].value)
+          self.config.clickJoinLayer = JSON.parse(self["config-join-click"].value)
         }
 
       },
