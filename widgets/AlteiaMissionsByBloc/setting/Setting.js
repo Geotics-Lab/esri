@@ -231,6 +231,19 @@ define(["dojo/_base/declare",
 
         }
 
+
+
+        if(!this.config.hasOwnProperty("clickJoinLayer")){
+          this.config.clickJoinLayer = []
+        }
+
+        this["config-join-click"].value = JSON.stringify(this.config.clickJoinLayer, null, "\t")
+
+
+        this["config-join-click"].onchange = function (e) {
+          this.config.clickJoinLayer = JSON.parse(this["config-join-click"].value)
+        }
+
       },
 
       getConfig: function () {
