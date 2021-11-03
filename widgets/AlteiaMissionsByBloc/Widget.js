@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
 					self.blocDescription = description
 					self.addBlocs(self.blocDescription)
 				})
-
+ 
 				this["mission-selector"].onchange = function (e) {
 
 					self.selectedIndex = this.value
@@ -406,7 +406,7 @@ define(["dojo/_base/declare",
 
 
 				query.outFields = ["*"];
-				query.where = field + "=" + value
+				query.where = field + "='" + value + "'"
 
 				featureLayer.queryExtent(query, function (result) {
 					resolve(result)
