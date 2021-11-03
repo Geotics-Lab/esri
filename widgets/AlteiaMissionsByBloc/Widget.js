@@ -53,6 +53,7 @@ define(["dojo/_base/declare",
 				this.host = this.config.host
 
 				this.tryToEnableClickLayer()
+				this.tryToEnableClickJoinLayer()
 
 
 
