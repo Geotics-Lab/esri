@@ -236,7 +236,7 @@ define(["dojo/_base/declare",
 
           var newDefinitionExpression = baseExpressionDefinition + operator + definitionExpression
           layer.setDefinitionExpression(newDefinitionExpression);
-
+          console.log("set new defex", newDefinitionExpression)
 
           this.activeFiltre[layer.id + definitionExpression] = {
             layer: layer,
@@ -266,7 +266,7 @@ define(["dojo/_base/declare",
             var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression, "")
           }
 
-
+          console.log("unsetdefexp", newDefinitionExpression)
           layer.setDefinitionExpression(newDefinitionExpression);
           delete this.activeFiltre[layer.id + definitionExpression]
 
@@ -278,6 +278,7 @@ define(["dojo/_base/declare",
 
       refreshDefinitionExpression: function () {
 
+        console.log(this.activeFiltre)
 
         for (const key in this.activeFiltre) {
           const filter = this.activeFiltre[key];
