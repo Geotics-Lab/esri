@@ -1,17 +1,45 @@
 
 
-define(["dojo/_base/declare",
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+define([
+  "dojo/_base/declare",
   'jimu/LayerInfos/LayerInfos',
   "jimu/BaseWidgetSetting",
   "dijit/_WidgetsInTemplateMixin",
-  "dijit/form/Form",
-  "jimu/dijit/CheckBox",
-  "dijit/form/NumberTextBox",
-  "dijit/form/ValidationTextBox"
+  'jimu/utils',
+  './lib/codemirror',
+  './lib/css',
+  './lib/javascript',
+  './lib/closebrackets',
+  './lib/matchbrackets'
 ],
-  function (declare, LayerInfos,
-    BaseWidgetSetting, _WidgetsInTemplateMixin) {
+  function (
+    declare,
+    LayerInfos,
+    BaseWidgetSetting,
+    _WidgetsInTemplateMixin,
+    utils,
+    CodeMirror) {
 
     return declare([BaseWidgetSetting, _WidgetsInTemplateMixin], {
 
@@ -19,81 +47,124 @@ define(["dojo/_base/declare",
 
 
       postCreate: function () {
+        console.log("postcreate")
         this.inherited(arguments);
 
-        var self = this;
+        utils.loadStyleLink('codemirrorstyle', this.folderUrl + 'setting/css/codemirror.css');
+        utils.loadStyleLink('codemirrortheme', this.folderUrl + 'setting/css/material-darker.css');
+
+
       },
 
       startup: function () {
 
+        this.inherited(arguments);
+        this.layerInfos = LayerInfos.getInstanceSync()._layerInfos;
+        this.setConfig(this.config);
 
         var self = this
-        this.inherited(arguments);
 
-        require(['https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.62.3/codemirror.min.js'], function (CodeMirror) {
+        this.enableConfigExport()
+        this.enableConfigImport()
+        this.enableUiSizeToggle()
 
-          self.CodeMirror = CodeMirror
-
-
-          if (this._started) {
-            return;
-          }
-          self.layerInfos = LayerInfos.getInstanceSync()._layerInfos;
-
-          self.setConfig(self.config);
-
-          console.log(self)
+        setTimeout(() => {
 
           self.setVisibilityTogglingFilter()
           self.setCustomScript()
           self.setCustomCss()
 
-          
-        self['import-config'].onchange = function (e) {
+        }, 2000);
+
+
+
+      },
+
+      enableConfigImport: function () {
+
+        var self = this
+
+        this['import-config'].onchange = function (e) {
           var files = document.getElementById('import-config').files;
           console.log(files);
           if (files.length <= 0) {
             return false;
           }
-        
+
           var fr = new FileReader();
-        
-          fr.onload = function(e) { 
-          console.log(e);
+
+          fr.onload = function (e) {
+            console.log(e);
             var result = JSON.parse(e.target.result);
             console.log(result)
             self.config = result
           }
-        
+
           fr.readAsText(files.item(0));
-          
+
         }
-        self['export-config'].onclick = function (e) {
+      },
+
+      enableConfigExport: function () {
+
+        var self = this
+
+        this['export-config'].onclick = function (e) {
           var saveData = (function () {
             var a = document.createElement("a");
             // document.body.appendChild(a);
             // a.style = "display: none";
             return function (data, fileName) {
-                var json = JSON.stringify(data),
-                    blob = new Blob([json], {type: "octet/stream"}),
-                    url = window.URL.createObjectURL(blob);
-                a.href = url;
-                a.download = fileName;
-                a.click();
-                window.URL.revokeObjectURL(url);
+              var json = JSON.stringify(data),
+                blob = new Blob([json], { type: "octet/stream" }),
+                url = window.URL.createObjectURL(blob);
+              a.href = url;
+              a.download = fileName;
+              a.click();
+              window.URL.revokeObjectURL(url);
             };
-            }());
-            
-    
-            saveData(self.config, "config.json");
-        }
+          }());
 
-        })
+
+          saveData(self.config, "config.json");
+        }
+      },
+
+      enableUiSizeToggle: function () {
+
+        var self = this
+
+        this['toggle-ui-size'].onclick = function (e) {
+
+          if (this.getAttribute('state') == "min") {
+            self['ui'].classList.add('setting-maximize')
+            this.innerHTML = "minimize ui"
+            this.setAttribute('state', 'max')
+          }
+          else {
+            self['ui'].classList.remove('setting-maximize')
+            this.innerHTML = "maximize ui"
+            this.setAttribute('state', 'min')
+          }
+
+
+
+        }
       },
 
       setVisibilityTogglingFilter: function (params) {
 
         var self = this
+
+        var codeMirror = CodeMirror.fromTextArea(this["retrieved-params"], {
+          lineNumbers: true,
+          mode: 'javascript',
+          theme: 'material-darker',
+          matchBrackets: true,
+          autoCloseBrackets: true
+        });
+
+        codeMirror.setValue(JSON.stringify(this.config.filterLayerOnLayerVisibilityChange, undefined, 2))
 
         this.visibilityTogglingFilterParameters = {
           "applyIfVisible": false,
@@ -101,11 +172,14 @@ define(["dojo/_base/declare",
           "filteredLayerId": [],
           "layerFilterField": null,
           "layerFilterOperator": "=",
-          "layerFilterCondition" : "AND",
+          "layerFilterCondition": "AND",
           "layerFilterValue": null
         }
 
-        this["retrieved-params"].innerHTML = JSON.stringify(this.config.filterLayerOnLayerVisibilityChange, undefined, 2)
+
+
+
+
 
         this.layerInfos.forEach(element => {
 
@@ -207,8 +281,8 @@ define(["dojo/_base/declare",
             if (!isExisting) {
               self.config.filterLayerOnLayerVisibilityChange.push(self.visibilityTogglingFilterParameters)
             }
-            
-            self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2)
+            codeMirror.setValue(JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2))
+
 
           }
           else {
@@ -217,38 +291,30 @@ define(["dojo/_base/declare",
           }
 
         }
-        this["reset-params"].onclick = function (params) {
-          self.config.filterLayerOnLayerVisibilityChange = []
-          self["retrieved-params"].innerHTML = JSON.stringify(self.config.filterLayerOnLayerVisibilityChange, undefined, 2).replace("<", "&lt;").replace(">", '&gt;')
 
-        }
-
-        this['toggle-edit-params'].onclick = function (e) {
-
-          switch (self["retrieved-params"].getAttribute('contenteditable')) {
-            case "true":
-              self["retrieved-params"].setAttribute('contenteditable', "false")
-              self["valid-edit-params"].style.display = "none"
-              break;
-
-            case "false":
-              self["retrieved-params"].setAttribute('contenteditable', "true")
-              self["valid-edit-params"].style.display = "unset"
-              break;
+        codeMirror.on("change", function () {
+          console.log("codemirrorchange")
+          try {
+            self.config.filterLayerOnLayerVisibilityChange = JSON.parse(codeMirror.getValue())
           }
-
-        }
-
-        this["valid-edit-params"].onclick = function (e) {
-          self.config.filterLayerOnLayerVisibilityChange = JSON.parse(self["retrieved-params"].innerHTML.replace("&lt;", "<").replace('&gt;', ">"))
-          self["retrieved-params"].setAttribute('contenteditable', "false")
-          self["valid-edit-params"].style.display = "none"
-        }
+          catch (error) {
+            console.log("invalid json")
+          }
+        });
 
       },
 
       setCustomScript: function () {
+        console.log("setCustomScript")
         var self = this
+
+        var codeMirror = CodeMirror.fromTextArea(this["custom-script-content"], {
+          lineNumbers: true,
+          mode: 'javascript',
+          theme: 'material-darker',
+          matchBrackets: true,
+          autoCloseBrackets: true
+        });
 
         var index = 0
         this.config.customScript.forEach(element => {
@@ -264,7 +330,7 @@ define(["dojo/_base/declare",
             var content = this.getAttribute('script-content')
             var indexSelected = this.getAttribute('script-index')
             self["custom-script-content"].setAttribute('selected', indexSelected)
-            self["custom-script-content"].value = content
+            codeMirror.setValue(content)
             self["custom-script-name"].value = name
             self['save-script'].style.display = "inline"
             self['remove-script'].style.display = "inline"
@@ -280,7 +346,7 @@ define(["dojo/_base/declare",
         this["add-script"].onclick = function (e) {
           self.config.customScript.push(JSON.parse(JSON.stringify({
             name: self["custom-script-name"].value,
-            content: self["custom-script-content"].value,
+            content: codeMirror.getValue(),
             format: self["custom-script-type"].value,
             target: self["custom-script-target"].value,
           })))
@@ -290,13 +356,13 @@ define(["dojo/_base/declare",
           li.classList.add("list-group-item")
           li.setAttribute("script-name", self["custom-script-name"].value)
           li.setAttribute("script-index", index)
-          li.setAttribute("script-content", self["custom-script-content"].value)
+          li.setAttribute("script-content", codeMirror.getValue())
           li.onclick = function (e) {
             var name = this.getAttribute('script-name')
             var content = this.getAttribute('script-content')
             var indexSelected = this.getAttribute('script-index')
             self["custom-script-content"].setAttribute('selected', indexSelected)
-            self["custom-script-content"].value = content
+            codeMirror.setValue(content)
             self["custom-script-name"].value = name
             self['save-script'].style.display = "inline"
             self['remove-script'].style.display = "inline"
@@ -308,7 +374,7 @@ define(["dojo/_base/declare",
           self["script-list"].appendChild(li)
 
           self["custom-script-name"].value = ""
-          self["custom-script-content"].value = ""
+          codeMirror.setValue("")
 
           index++
           console.log("config", self.config)
@@ -319,7 +385,7 @@ define(["dojo/_base/declare",
 
           self.config.customScript[indexSelected] = {
             name: self["custom-script-name"].value,
-            content: self["custom-script-content"].value
+            content: codeMirror.getValue()
           }
           self["script-list"].querySelectorAll('[script-index="' + indexSelected + '"]')[0].setAttribute("script-name", self["custom-script-name"].value)
           self["script-list"].querySelectorAll('[script-index="' + indexSelected + '"]')[0].setAttribute("script-content", self["custom-script-content"].value)
@@ -330,7 +396,7 @@ define(["dojo/_base/declare",
           self['save-script'].style.display = "none"
           self['remove-script'].style.display = "none"
           self["custom-script-name"].value = ""
-          self["custom-script-content"].value = ""
+          codeMirror.setValue("")
 
 
           self["custom-script-type"].removeAttribute('disabled')
@@ -344,7 +410,7 @@ define(["dojo/_base/declare",
           self['remove-script'].style.display = "none"
           self['add-script'].style.display = "inline"
           self["custom-script-name"].value = ""
-          self["custom-script-content"].value = ""
+          codeMirror.setValue("")
           self["script-list"].querySelectorAll('[script-index="' + indexSelected + '"]')[0].remove()
 
           for (let count = 0; count < self["script-list"].querySelectorAll('[script-index]').length; count++) {
@@ -361,7 +427,19 @@ define(["dojo/_base/declare",
       },
 
       setCustomCss: function () {
+        console.log("sertcustomScript")
         var self = this
+
+        var codeMirror = CodeMirror.fromTextArea(this['custom-css-content'], {
+          lineNumbers: true,
+          mode: 'text/css',
+          theme: 'material-darker',
+          matchBrackets: true,
+          autoCloseBrackets: true
+        });
+        //console.log(this['custom-css-content-sizer'],this['custom-css-content-sizer'].clientWidth)
+        //this.CSScodemirror.setSize( 300, null);
+
 
         var index = 0
         this.config.customCss.forEach(element => {
@@ -382,16 +460,18 @@ define(["dojo/_base/declare",
             self['save-css'].style.display = "inline"
             self['remove-css'].style.display = "inline"
             self['add-css'].style.display = "none"
-
+            codeMirror.setValue(content);
           }
           this["css-list"].appendChild(li)
           index++
         });
 
         this["add-css"].onclick = function (e) {
+
+          console.log(codeMirror.getValue())
           self.config.customCss.push(JSON.parse(JSON.stringify({
             name: self["custom-css-name"].value,
-            content: self["custom-css-content"].value
+            content: codeMirror.getValue()
           })))
 
           var li = document.createElement("li")
@@ -399,13 +479,13 @@ define(["dojo/_base/declare",
           li.classList.add("list-group-item")
           li.setAttribute("css-name", self["custom-css-name"].value)
           li.setAttribute("css-index", index)
-          li.setAttribute("css-content", self["custom-css-content"].value)
+          li.setAttribute("css-content", codeMirror.getValue())
           li.onclick = function (e) {
             var name = this.getAttribute('css-name')
             var content = this.getAttribute('css-content')
             var indexSelected = this.getAttribute('css-index')
             self["custom-css-content"].setAttribute('selected', indexSelected)
-            self["custom-css-content"].value = content
+            self["custom-css-content"].value = codeMirror.getValue()
             self["custom-css-name"].value = name
             self['save-css'].style.display = "inline"
             self['remove-css'].style.display = "inline"
@@ -416,7 +496,7 @@ define(["dojo/_base/declare",
 
           self["custom-css-name"].value = ""
           self["custom-css-content"].value = ""
-          
+
           index++
           console.log("config", self.config)
         }
@@ -426,10 +506,10 @@ define(["dojo/_base/declare",
 
           self.config.customCss[indexSelected] = {
             name: self["custom-css-name"].value,
-            content: self["custom-css-content"].value
+            content: codeMirror.getValue()
           }
           self["css-list"].querySelectorAll('[css-index="' + indexSelected + '"]')[0].setAttribute("css-name", self["custom-css-name"].value)
-          self["css-list"].querySelectorAll('[css-index="' + indexSelected + '"]')[0].setAttribute("css-content", self["custom-css-content"].value)
+          self["css-list"].querySelectorAll('[css-index="' + indexSelected + '"]')[0].setAttribute("css-content", codeMirror.getValue())
           self["css-list"].querySelectorAll('[css-index="' + indexSelected + '"]')[0].innerHTML = self["custom-css-name"].value
 
 
@@ -437,7 +517,7 @@ define(["dojo/_base/declare",
           self['save-css'].style.display = "none"
           self['remove-css'].style.display = "none"
           self["custom-css-name"].value = ""
-          self["custom-css-content"].value = ""
+          codeMirror.setValue("")
 
 
         }
@@ -484,4 +564,7 @@ define(["dojo/_base/declare",
 
   });
 
-   
+
+
+
+

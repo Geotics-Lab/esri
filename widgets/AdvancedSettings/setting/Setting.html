@@ -1,13 +1,18 @@
 
 
-	<div>
-		<div style="text-align: right;">
+	<div data-dojo-attach-point="ui" >
+		<div class="setting-header">
+			<button data-dojo-attach-point="toggle-ui-size" class="btn btn-primary" style="margin: 5px;" state="min">maximize ui</button>
 			<button data-dojo-attach-point="export-config" class="btn btn-primary" style="margin: 5px;">Export settings</button>
-			<input type="file" id="import-config"  data-dojo-attach-point="import-config" value="Import" />
+			<button  class="btn btn-primary" style="margin: 5px;margin: 5px;
+			padding: 3px 8px;"><input type="file" id="import-config"  data-dojo-attach-point="import-config" value="Import" />Import settings</button>
+
+			
 		</div>
 	
-		
-	
+		<div class="padmarg-adjust">
+
+			
 		<div class="accordion" id="accordion-element">
 	
 			<div class="accordion-item">
@@ -55,24 +60,9 @@
 							</div>
 	
 	
-	
-	
 							<textarea data-dojo-attach-point="retrieved-params" contenteditable="false"
-								class="form-control">
+								class="form-control"></textarea>
 	
-	
-							</textarea>
-	
-							<div>
-								<button data-dojo-attach-point="reset-params" class="btn btn-primary"><i
-										class="bi bi-eraser-fill"></i> reset
-									parameter</button>
-								<button data-dojo-attach-point="toggle-edit-params" class="btn btn-primary"><i
-										class="bi bi-pencil-square"></i> edit
-									parameter</button>
-								<button data-dojo-attach-point="valid-edit-params" style="display: none;"
-									class="btn btn-primary">valid editing</button>
-							</div>
 	
 						</div>
 					</div>
@@ -139,7 +129,7 @@
 							<button data-dojo-attach-point="remove-css" style="display:none" class="btn btn-danger"><i
 									class="bi bi-trash-fill"></i> remove css</button>
 						</div>
-	
+						
 						<textarea data-dojo-attach-point="custom-css-content" class="form-control"></textarea>
 	
 						<ul class="list-group" data-dojo-attach-point="css-list">
@@ -150,6 +140,8 @@
 			</div>
 	
 		</div>
+		</div>
+	
 	
 	
 	</div>

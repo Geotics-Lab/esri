@@ -1,3 +1,6 @@
 {
-  "filterLayerOnLayerVisibilityChange": []
+  "filterLayerOnLayerVisibilityChange": [],
+  "customScript": [],
+  "customCss" : []
+
 }
