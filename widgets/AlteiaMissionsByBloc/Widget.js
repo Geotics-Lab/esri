@@ -108,7 +108,7 @@ define(["dojo/_base/declare",
 
 				this['block-tab'].onclick = function name(params) {
 					
-					
+					self["get-by-click-join"].checked = false
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
 						element.classList.remove('active')
@@ -121,6 +121,7 @@ define(["dojo/_base/declare",
 					self['block-tab-content'].classList.add('active')
 				}
 				this['click-tab'].onclick = function name(params) {
+					self["get-by-click-join"].checked = true
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
 						element.classList.remove('active')
