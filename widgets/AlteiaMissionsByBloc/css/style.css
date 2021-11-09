@@ -1,3 +1,7 @@
+.wmts-adaptor{
+  height: 100%;
+}
+
 .wmts-adaptor [type="date"] {
     background: url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png) 97% 50% no-repeat;
     border: solid 1px rgba(0,0,0,0.2);
@@ -102,6 +106,7 @@ margin-top: 0;
 
 .wmts-adaptor .wmts-adaptor-tab-content{
   display: none;
+  padding: 5px;
 }
 .wmts-adaptor .wmts-adaptor-tab-content.active{
   display: block!important;
@@ -118,6 +123,18 @@ margin-top: 0;
   border-top: solid 3px dodgerblue;
 }
 .wmts-adaptor .wmts-adaptor-tab:hover{
-  border-top: solid 1px dodgerblue;
+  border-top: solid 3px dodgerblue;
   cursor: pointer;
+}
+
+.wmts-adaptor .container{
+  border: solid 1px rgba(0,0,0,0.2);
+      border-top-color: rgba(0, 0, 0, 0.2);
+      border-top-style: solid;
+      border-top-width: 1px;
+  border-top: none !important;
+  overflow: scroll;
+  height: calc(100% - 30px);
+  border-radius: 0px 0px 5px 5px;
+	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 }
