@@ -1,657 +1,310 @@
-///////////////////////////////////////////////////////////////////////////
-// Copyright © Esri. All Rights Reserved.
-//
-// Licensed under the Apache License Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//    http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-///////////////////////////////////////////////////////////////////////////
+
 define(["dojo/_base/declare",
-	"dojo/_base/lang",
-	"dojo/on",
-	"esri/layers/WebTiledLayer",
-	"esri/layers/FeatureLayer",
-	"esri/geometry/Extent",
-	"esri/SpatialReference",
-	"esri/tasks/QueryTask",
-	"esri/tasks/query",
-	"jimu/BaseWidget",
-	"dijit/_WidgetsInTemplateMixin",
-	"dojo/_base/array"
+  "jimu/BaseWidget",
+  "dijit/_WidgetsInTemplateMixin",
+  'dojo/on'
 ],
-	function (declare, lang, on, WebTiledLayer, FeatureLayer, Extent, SpatialReference, QueryTask, Query, BaseWidget, _WidgetsInTemplateMixin, array) {
-		return declare([BaseWidget, _WidgetsInTemplateMixin], {
+  function (declare, BaseWidget, _WidgetsInTemplateMixin, on) {
+    return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
-			name: "AddData",
-			baseClass: "jimu-widget-add-data",
+      name: "AdvencedSettings",
+      baseClass: "jimu-widget-advanced-settings",
 
-			postCreate: function () {
-				this.inherited(arguments);
-			},
+      postCreate: function () {
+        this.inherited(arguments);
+      },
 
-			startup: function () {
+      startup: function () {
 
-				console.log("alteia missions", this)
+        console.log(this)
+        var self = this
 
-				var self = this
-				this.layers = this.getLayers()
-				this.webTiledLayer = null
-				this.blocDescription = null
-				this.surveyDescription = null
-				this.startDate = null
-				this.endDate = null
-				this.selectedIndex = null
-				this.temporaryDefinitionExpression = ""
+        this.activeFiltre = {}
 
-				this.host = this.config.host
 
-				this.tryToEnableClickLayer()
-				this.tryToEnableClickJoinLayer()
 
+        for (const key in this.config) {
 
+          const parameters = this.config[key];
 
+          switch (key) {
+            case "filterLayerOnLayerVisibilityChange":
+              this.filterLayerOnLayerVisibilityChange(parameters)
+              break;
+            case "customScript":
+              this.AddCustomScript(parameters)
+              break;
+            case "customCss":
+              this.AddCustomCss(parameters)
+              break;
 
-				self.getMissionsDescription().then(function (description) {
-					self.blocDescription = description
-					self.addBlocs(self.blocDescription)
-				})
 
-				this["mission-selector"].onchange = function (e) {
+          }
 
-					self.selectedIndex = this.value
-					self.surveyDescription = self.getLatestMission(self.blocDescription[this.value])
-					self.clearTiledLayer()
-					self.addTiledLayer(self.surveyDescription)
 
-				}
+        }
 
-				this["start-date"].onchange = function (e) {
 
-					self.startDate = new Date(this.value)
-					self.clearMissions()
-					self.clearTiledLayer()
+      },
 
-					if (self.selectedIndex != null) {
 
-						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
-						self.clearTiledLayer()
-						self.addTiledLayer(self.surveyDescription)
-					}
 
+      AddCustomScript: function (scriptList) {
 
-				}
 
-				this["end-date"].onchange = function (e) {
+        scriptList.forEach(scriptContent => {
 
-					self.endDate = new Date(this.value)
-					self.clearMissions()
-					self.clearTiledLayer()
-					self.addBlocs(self.blocDescription)
 
-					if (self.selectedIndex != null) {
+          switch (scriptContent.target) {
+            case "body":
+              var target = document.body
+              break;
 
-						self.surveyDescription = self.getLatestMission(self.blocDescription[self.selectedIndex])
-						self.clearTiledLayer()
-						self.addTiledLayer(self.surveyDescription)
-					}
+            case "head":
+              var target = document.head
+              break;
+          }
 
 
+          switch (scriptContent.format) {
+            case "src":
+              var script = document.createElement('script');
+              var test_element = document.createElement('div');
+              test_element.innerHTML = scriptContent.content;
 
-				}
+              var element = test_element.childNodes[0];
+              var attributes = element.attributes;
 
+              for (var i = 0; i < attributes.length; i++) {
+                var attribute = attributes[i];
 
-			},
+                script.setAttribute(attribute.name, attribute.value);
+              }
 
+              target.appendChild(script);
 
-			tryToEnableClickLayer: function () {
+              break;
 
-				var self = this
+            case "text":
+              var script = document.createElement('script');
+              script.type = 'text/javascript';
+              script.innerHTML = scriptContent.content
+              target.appendChild(script);
+              break;
+          }
 
-				if (this.config.clickLayer.length > 0) {
 
 
-					this.config.clickLayer.forEach(layerInfo => {
-						var layer = self.map.getLayer(layerInfo.layerId)
+          //document.head.appendChild(createElementFromHTML(scriptContent.content))
 
-						layer.on("click", function (e) {
-							if (self["get-by-click"].checked == true) {
+        });
 
 
-								self.config.clickLayer.forEach(element => {
-									if (element.layerId == e.graphic._layer.id) {
+        function createElementFromHTML(htmlString) {
+          var div = document.createElement('div');
+          div.innerHTML = htmlString.trim();
 
+          return div.firstChild;
+        }
 
 
-										var url = e.graphic.attributes[element.orthoField]
+      },
 
-										self.clearTiledLayer()
-										var tilesUrl = url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+      AddCustomCss: function (cssList) {
 
-										self.webTiledLayer = new WebTiledLayer(tilesUrl, {
-											"copyright": '',
-											"id": "Alteia Orthomosaic"
-										});
-										self.map.addLayer(self.webTiledLayer);
-									}
-								});
 
-							}
+        cssList.forEach(cssContent => {
 
-						})
-					});
+          var styleSheet = document.createElement("style")
+          styleSheet.type = "text/css"
+          styleSheet.innerText = cssContent.content
+          document.head.appendChild(styleSheet)
 
-					this["get-by-click"].onchange = function (e) {
+        });
 
-						if (self["get-by-click"].checked == true) {
 
-							//document.getElementById("map").style.cursor = "crosshair"
 
-						}
-						else {
-							//document.getElementById("map").style.cursor = "none"
-						}
+      },
 
-					}
+      filterLayerOnLayerVisibilityChange: function (parameters) {
 
+        var self = this
 
+        parameters.forEach(element => {
 
+          var visibilityLayer = this.map.getLayer(element.visibilityLayerId)
+          var definitionExpression = element.layerFilterField + element.layerFilterOperator + element.layerFilterValue
+          var condition = element.layerFilterCondition
+          var applyIfVisible = element.applyIfVisible
+          var filteredLayers = []
 
+          element.filteredLayerId.forEach(filteredLayerUid => {
+            filteredLayers.push(this.map.getLayer(filteredLayerUid))
+          });
 
-				}
-				else {
-					this["mission-by-click"].style.display = "none"
-				}
-			},
 
-			tryToEnableClickJoinLayer: function () {
 
-				var self = this
-				if (this.config.clickJoinLayer.length > 0) {
+          visibilityLayer.on("visibility-change", function (e) {
 
+            switch (applyIfVisible) {
 
-					this.config.clickJoinLayer.forEach(layerInfo => {
-						var layer = self.map.getLayer(layerInfo.layerId)
+              case true:
 
-						layer.on("click", function (e) {
-							if (self["get-by-click-join"].checked == true) {
+                switch (e.visible) {
+                  case true:
+                    self.setDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    break;
 
+                  case false:
+                    self.unsetDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    break;
+                }
 
-								self.config.clickJoinLayer.forEach(element => {
-									if (element.layerId == e.graphic._layer.id) {
+                break;
 
+              case false:
 
+                switch (e.visible) {
+                  case true:
+                    self.unsetDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    break;
 
-										var joinValue = e.graphic.attributes[element.joinField]
+                  case false:
+                    self.setDefinitionExpression(filteredLayers, definitionExpression, condition)
+                    break;
+                }
 
-										self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function (result) {
-											console.log(result)
-											var features = result.features
-											var uniqueMission = self.getUniqueMissions(features, element)
-											self.buildMissionList(uniqueMission)
+                break;
+            }
 
-											console.log(uniqueMission)
-										})
-									}
-								});
 
-							}
 
-						})
-					});
 
+          })
 
 
+          filteredLayers.forEach(filteredLayer => {
 
+            on(filteredLayer, 'update-end', function (e) {
+              console.info("resfresh definition expression")
+              self.refreshDefinitionExpression()
 
 
+              repetitionCount = 0
+              var interval = setInterval(() => {
 
-				}
-				else {
-					this["mission-by-click-join"].style.display = "none"
-				}
-			},
+                self.refreshDefinitionExpression()
 
-			getUniqueMissions: function (features, settings) {
+                if (repetitionCount > 10) {
+                  clearInterval(interval)
+                }
 
-				var missionList = []
-				var uniqueMissions = []
+                repetitionCount++
+              }, 500);
+            })
 
-				features.forEach(element => {
-					missionUrl = element.attributes[element.missionUrl]
-					missionName = element.attributes[element.missionName]
-					missionDate = element.attributes[element.missionDate]
+          });
 
-					if (missionList.includes(missionName) == false) {
-						missionList.push(missionName)
-						uniqueMissions.push({
-							url: missionUrl,
-							name: missionName,
-							date: missionDate
-						})
-					}
-				});
+        });
 
-				return uniqueMissions
-			},
 
-			buildMissionList: function (list) {
+        /*     setInterval(() => {
+              this.refreshDefinitionExpression()
+            }, 1000); */
 
-				this['related-missions'].innerHTML = ""
 
-				var self = this
 
-				list.forEach(element => {
+      },
 
-					var uiRow = document.createElement('div')
-					uiRow.innerHTML = element.name
-					uiRow.setAttribute('url', element.url)
+      setDefinitionExpression: function (layers, definitionExpression, condition) {
 
-					uiRow.onclick = function name(params) {
-						var url = this.getAttribute('url')
-						self.clearTiledLayer()
-						var tilesUrl = url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+        layers.forEach(layer => {
 
-						self.webTiledLayer = new WebTiledLayer(tilesUrl, {
-							"copyright": '',
-							"id": "Alteia Orthomosaic"
-						});
-						self.map.addLayer(self.webTiledLayer);
-					}
+          var baseExpressionDefinition = ""
+          var operator = ""
 
-					this['related-missions'].appendChild(uiRow)
-				});
+          if (layer.getDefinitionExpression() != undefined) {
+            if (layer.getDefinitionExpression().length > 0) {
 
-			},
+              var baseExpressionDefinition = layer.getDefinitionExpression()
+              var operator = " " + condition + " "
 
-			addBlocs: function (description) {
+            }
+          }
 
-				var self = this
+          var newDefinitionExpression = baseExpressionDefinition + operator + definitionExpression
+          layer.setDefinitionExpression(newDefinitionExpression);
 
-				for (const key in description) {
 
-					const element = description[key];
+          this.activeFiltre[layer.id + definitionExpression] = {
+            layer: layer,
+            definitionExpression: definitionExpression,
+            condition: condition,
+            newDefinitionExpression: newDefinitionExpression
+          }
 
-					var option = document.createElement('option')
+        });
 
-					option.innerHTML = key
-					option.value = key
-					option.setAttribute("survey-description", JSON.stringify(element))
 
-					self["mission-selector"].appendChild(option)
 
-				}
+      },
 
-			},
 
-			getLatestMission: function (missionsList) {
+      unsetDefinitionExpression: function (layers, definitionExpression, condition) {
 
-				var latestMission = null
-				var sortedMissionList = this.getSortedMissionList(missionsList)
+        layers.forEach(layer => {
 
-				sortedMissionList.forEach(element => {
-					console.log(element)
-					console.log(this.dateFilterIsValid(new Date(element.date)))
-					if (this.dateFilterIsValid(new Date(element.date))) {
-						latestMission = element
-						return
-					}
-				});
+          if (layer.getDefinitionExpression().includes(definitionExpression + " " + condition + " ")) {
+            var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression + " " + condition + " ", "")
+          }
+          else if (layer.getDefinitionExpression().includes(" " + condition + " " + definitionExpression)) {
+            var newDefinitionExpression = layer.getDefinitionExpression().replace(" " + condition + " " + definitionExpression, "")
+          }
+          else {
+            var newDefinitionExpression = layer.getDefinitionExpression().replace(definitionExpression, "")
+          }
 
 
+          layer.setDefinitionExpression(newDefinitionExpression);
+          delete this.activeFiltre[layer.id + definitionExpression]
 
+        });
 
-				return latestMission
-			},
 
-			getSortedMissionList: function (missionList) {
+      },
 
-				var sortedMissionList = missionList.sort(function (a, b) {
-					var c = new Date(a.date);
-					var d = new Date(b.date);
-					return c - d;
-				});
 
-				return sortedMissionList
+      refreshDefinitionExpression: function () {
 
 
-			},
+        for (const key in this.activeFiltre) {
+          const filter = this.activeFiltre[key];
 
-			clearMissions: function () {
-				this["mission-selector"].innerHTML = "<option>Block</option>"
-			},
+          if (!filter.layer.getDefinitionExpression().includes(filter.definitionExpression)) {
+            this.setDefinitionExpression(filter.layer, filter.definitionExpression, filter.condition)
+          }
 
-			addTiledLayer: function (description) {
+        }
+      },
 
-				if (description == null) {
-					alert("no referenced orthomosaic for this block.")
-				}
-				else {
-					var tilesUrl = description.url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
 
-					this.webTiledLayer = new WebTiledLayer(tilesUrl, {
-						"copyright": '',
-						"id": "Alteia Orthomosaic"//description.name
-					});
-					this.map.addLayer(this.webTiledLayer);
-					this.setLayersDefinitionExpression(description)
+      _GET: function (path) {
 
-					/* 	var spatialRef = new SpatialReference({ wkid: 4326 });
-						var extent = new Extent();
-						extent.xmin = description.real_bbox.bbox[0];
-						extent.ymin = description.real_bbox.bbox[1];
-						extent.xmax = description.real_bbox.bbox[2];
-						extent.ymax = description.real_bbox.bbox[3];
-						extent.spatialReference = spatialRef;
-		
-						this.map.setExtent(extent); */
-				}
+        return new Promise((resolve, reject) => {
 
+          var xmlHttp = new XMLHttpRequest();
+          xmlHttp.onreadystatechange = function () {
+            if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+              resolve(xmlHttp.responseText);
+          }
+          xmlHttp.open("GET", path, true); // true for asynchronous 
+          xmlHttp.send(null);
 
+        })
+      }
 
-			},
 
-			setLayersDefinitionExpression: function (description) {
+    });
 
-				var layersUrl = []
-				var previousDefinitionExpression = this.temporaryDefinitionExpression
+  });
 
-				this.config.layers.forEach(element => {
-					layersUrl.push(element.url)
-				});
-
-				this.layers.forEach(layer => {
-
-					console.log(layer)
-
-
-					if (layersUrl.includes(layer.url)) {
-
-						var definitionExpressionField = null
-
-						if (layer.getDefinitionExpression() == undefined) {
-							var definitionExpression = "1 = 1"
-						}
-						else {
-							var definitionExpression = layer.getDefinitionExpression()
-						}
-
-
-						console.log("this.temporaryDefinitionExpression", this.temporaryDefinitionExpression)
-						console.log("definitionExpression : ", definitionExpression)
-						console.log("previousDefinitionExpression : ", previousDefinitionExpression)
-
-						this.config.layers.forEach(element => {
-							if (element.url == layer.url) {
-								definitionExpressionField = element.surveyNameField
-							}
-
-						});
-
-						var temporaryDefinitionExpression = definitionExpressionField + " = '" + description.name + "'"
-
-
-						if (this.temporaryDefinitionExpression.length > 0) {
-
-							definitionExpression = definitionExpression.replace(" AND " + previousDefinitionExpression, "")
-							console.log("new base definitionExpression : ", definitionExpression)
-
-
-						}
-						console.log("new definitionExpression : ", definitionExpression + " AND " + temporaryDefinitionExpression)
-
-						if (this.config.filterAction == true) {
-							layer.setDefinitionExpression(definitionExpression + " AND " + temporaryDefinitionExpression)
-						}
-
-						this.temporaryDefinitionExpression = temporaryDefinitionExpression
-					}
-
-				});
-
-
-				if (this.config.zoomAction == true) {
-					this.setExtentOfDefinitionExpression(this.temporaryDefinitionExpression)
-				}
-
-
-
-			},
-
-			setExtentOfDefinitionExpression: function (definitionExpression) {
-
-				var self = this
-
-				featureLayer = new FeatureLayer("https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_DroneLandMarks/FeatureServer/0")
-
-				query = new Query();
-
-
-				query.outFields = ["*"];
-				query.where = definitionExpression
-
-				featureLayer.queryExtent(query, function (result) {
-					console.log(result.extent)
-					//var center = result.extent.getCenter()
-
-					//self.map.centerAndZoom(center, self.map.getZoom())
-					self.map.setExtent(result.extent, true).then(function (params) {
-						self.map.setZoom(self.map.getZoom() - 1)
-					})
-
-				});
-			},
-
-
-
-			getJoinnedFeature: function (url, field, value) {
-
-				var self = this
-				return new Promise((resolve, reject) => {
-
-					featureLayer = new FeatureLayer(url)
-
-					query = new Query();
-
-
-					query.outFields = ["*"];
-					query.where = field + "='" + value + "'"
-
-					console.log(query.where)
-
-					featureLayer.queryFeatures(query, function (result) {
-						resolve(result)
-
-
-					});
-				})
-			},
-
-			clearTiledLayer: function () {
-
-				try {
-					this.map.removeLayer(this.webTiledLayer)
-
-				}
-				catch (e) { }
-			},
-
-
-
-			dateFilterIsValid: function (date) {
-
-				function isDate(date) {
-					return date > 0
-				}
-
-
-				if (isDate(this.startDate) == false && isDate(this.endDate) == false) {
-					return true
-				}
-				if (isDate(this.startDate) == false && isDate(this.endDate) == true) {
-					if (date < this.endDate) {
-						return true
-					}
-				}
-				if (isDate(this.startDate) == true && isDate(this.endDate) == false) {
-					if (this.startDate < date) {
-						return true
-					}
-				}
-				if (isDate(this.startDate) == true && isDate(this.endDate) == true) {
-					if (this.startDate < date && date < this.endDate) {
-						return true
-					}
-				}
-
-			},
-
-			getMissionsDescription: function () {
-
-				var self = this
-
-				return new Promise((resolve, reject) => {
-
-					var uniqueMissionListByBloc = {}
-					var allFeaturesPromise = []
-
-
-
-					for (const key in self.config.layers) {
-
-						const layer = self.config.layers[key];
-
-						allFeaturesPromise.push(self.getAllLayerFeatures(layer.url))
-
-					}
-
-
-
-					Promise.all(allFeaturesPromise).then(function (values) {
-
-						values.forEach(value => {
-
-							value.features.forEach(feature => {
-
-								var blocCursor = feature.attributes[self.config.layers[value.index].blocField]
-
-
-								if (!Object.hasOwnProperty.call(uniqueMissionListByBloc, blocCursor)) {
-									uniqueMissionListByBloc[blocCursor] = []
-								}
-
-
-								var missionIsAlreadyAdded = uniqueMissionListByBloc[blocCursor].includes(feature.attributes[self.config.layers[value.index].surveyNameField])
-								var missionLength = feature.attributes[self.config.layers[value.index].surveyNameField].length
-
-								if (missionIsAlreadyAdded == false && missionLength > 1) {
-
-									uniqueMissionListByBloc[blocCursor].push({
-										url: feature.attributes[self.config.layers[value.index].surveyTileField],
-										date: feature.attributes[self.config.layers[value.index].surveyDateField],
-										name: feature.attributes[self.config.layers[value.index].surveyNameField]
-									})
-								}
-							});
-
-
-						});
-
-						resolve(uniqueMissionListByBloc)
-
-					})
-
-
-
-				})
-
-			},
-
-
-
-			getAllLayerFeatures: function (url) {
-
-				var self = this
-
-				return new Promise((resolve, reject) => {
-
-
-					function onResults(results) {
-
-						resolve({
-							index: index,
-							features: results.features
-						})
-
-					}
-
-
-					for (var index = 0; index < self.config.layers.length; index++) {
-						const element = self.config.layers[index];
-						if (url == element.url) {
-							break
-						}
-					}
-
-					queryTask = new QueryTask(url);
-
-
-					query = new Query();
-					//query.returnGeometry = false;
-					query.outFields = ["*"];
-					query.where = "1=1";
-
-
-					queryTask.execute(query, onResults);
-
-
-				})
-
-			},
-
-			executeIfLayersLoaded: function (callback) {
-
-				var toCheckLayers = []
-				var checkedLayers = 0
-
-				this.config.layers.forEach(element => {
-					layersUrl.push(element.url)
-				});
-
-
-				this.layers.forEach(layer => {
-
-					if (layersUrl.includes(layer.url)) {
-						checkedLayers++
-						if (toCheckLayers.length == checkedLayers) {
-							callback()
-						}
-					}
-
-				});
-
-			},
-
-			getLayers: function name(params) {
-
-				var layers = []
-
-				this.map.graphicsLayerIds.forEach(element => {
-
-					layers.push(this.map.getLayer(element))
-
-				});
-
-				return layers
-			}
-
-
-		});
-
-	});
