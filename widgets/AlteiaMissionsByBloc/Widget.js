@@ -117,8 +117,8 @@ define(["dojo/_base/declare",
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
 						element.classList.remove('active')
 					}
-					this.classList.add('active')
-					this['block-tab-content'].add('active')
+					self.classList.add('active')
+					self['block-tab-content'].add('active')
 				}
 				this['click-tab'].onclick = function name(params) {
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
@@ -129,8 +129,8 @@ define(["dojo/_base/declare",
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
 						element.classList.remove('active')
 					}
-					this.classList.add('active')
-					this['click-tab-content'].add('active')
+					self.classList.add('active')
+					self['click-tab-content'].add('active')
 				}
 
 
