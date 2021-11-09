@@ -252,6 +252,7 @@ define(["dojo/_base/declare",
 					var uiRow = document.createElement('div')
 					uiRow.innerHTML = element.name
 					uiRow.setAttribute('url', element.url)
+					uiRow.classList.add('related-row')
 
 					uiRow.onclick = function name(params) {
 						var url = this.getAttribute('url')
