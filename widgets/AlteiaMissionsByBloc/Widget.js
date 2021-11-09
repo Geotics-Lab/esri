@@ -106,6 +106,33 @@ define(["dojo/_base/declare",
 
 				}
 
+				this['block-tab'].onclick = function name(params) {
+					
+					
+					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
+						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						element.classList.remove('active')
+					}
+					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab-content").length; index++) {
+						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						element.classList.remove('active')
+					}
+					this.classList.add('active')
+					this['block-tab-content'].add('active')
+				}
+				this['click-tab'].onclick = function name(params) {
+					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
+						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						element.classList.remove('active')
+					}
+					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab-content").length; index++) {
+						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						element.classList.remove('active')
+					}
+					this.classList.add('active')
+					this['click-tab-content'].add('active')
+				}
+
 
 			},
 

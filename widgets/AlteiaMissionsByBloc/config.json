@@ -2,29 +2,17 @@
   "zoomAction" : false,
   "filterAction" : false,
   "layers": [
-    {
-      "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_DroneLandMarks/FeatureServer/0",
-      "surveyTileField": "surv_tiles",
-      "surveyNameField": "surv_lib",
-      "surveyDateField" : "surv_date",
-      "blocField" : ""
-    },
-    {
-      "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_ContouringVillages/FeatureServer/0",
-      "surveyTileField": "surv_tiles",
-      "surveyNameField": "surv_lib",
-      "surveyDateField" : "surv_date",
-      "blocField" : ""
-    },
-    {
-      "url": "https://gis-dv1.eramet.com/server/rest/services/00-POC/aa_gco_cc_ContouringFields/FeatureServer/0",
-      "surveyTileField": "surv_tiles",
-      "surveyNameField": "surv_lib",
-      "surveyDateField" : "surv_date",
-      "blocField" : ""
-    }
+    
   ],
   "clickLayer": [
     
+  ],
+
+  "clickJoinLayer": [
+    {
+      "layerId": "ac_gco_env_TreeDetection_OperationalView_8289",
+      "joinField": "orthomosaic_url",
+      "joinLayerUrl" :  "https://gis-dv1.eramet.com/server/rest/services/00-POC/ac_gco_env_TreeDetection/FeatureServer/0"
+    }
   ]
 }
