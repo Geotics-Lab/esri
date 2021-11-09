@@ -264,6 +264,15 @@ define(["dojo/_base/declare",
 							"id": "Alteia Orthomosaic"
 						});
 						self.map.addLayer(self.webTiledLayer);
+						
+
+						
+						for (let index = 0; index < document.getElementsByClassName('related-row').length; index++) {
+							const element = document.getElementsByClassName('related-row')[index];
+							element.classList.remove("active")
+						}
+
+						this.classList.add('active')
 					}
 
 					this['related-missions'].appendChild(uiRow)
