@@ -119,6 +119,7 @@ margin-top: 0;
   padding: 3px 10px;
   margin-left:10px;
   box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
+  font-size: x-small;
 }
 .wmts-adaptor .wmts-adaptor-tab.active{
   border-top: solid 3px dodgerblue;
