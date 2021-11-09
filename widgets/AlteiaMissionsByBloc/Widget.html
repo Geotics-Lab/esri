@@ -1,31 +1,37 @@
 <div class="wmts-adaptor">
 
-	<div><span class="wmts-adaptor-tab" data-dojo-attach-point="block-tab">get by block</span><span  class="wmts-adaptor-tab" data-dojo-attach-point="click-tab">get by
-			click</span></div>
+	<div style="border-bottom: solid 1px rgba(0,0,0,0.2);">
+		<span class="wmts-adaptor-tab" data-dojo-attach-point="block-tab">get by block</span><span  class="wmts-adaptor-tab" data-dojo-attach-point="click-tab">get by
+			click</span>
+	</div>
+	<div style="border:  solid 1px rgba(0,0,0,0.2);border-top:none!important;">
 
-	<div data-dojo-attach-point="block-tab-content"  class="wmts-adaptor-tab-content">
-		<div style="display:flex;">
-			<input type="date" data-dojo-attach-point="start-date"><input type="date" data-dojo-attach-point="end-date">
+		<div data-dojo-attach-point="block-tab-content"  class="wmts-adaptor-tab-content">
+			<div style="display:flex;">
+				<input type="date" data-dojo-attach-point="start-date"><input type="date" data-dojo-attach-point="end-date">
+			</div>
+	
+			<select data-dojo-attach-point="mission-selector">
+				<option>Block</option>
+			</select>
+			<div class="get-by-click-container" data-dojo-attach-point="mission-by-click">
+				<input id="get-by-click" type="checkbox" data-dojo-attach-point="get-by-click">
+				<label for="get-by-click">select an item to display tiles</label>
+			</div>
 		</div>
-
-		<select data-dojo-attach-point="mission-selector">
-			<option>Block</option>
-		</select>
-		<div class="get-by-click-container" data-dojo-attach-point="mission-by-click">
-			<input id="get-by-click" type="checkbox" data-dojo-attach-point="get-by-click">
-			<label for="get-by-click">select an item to display tiles</label>
+		<div data-dojo-attach-point="click-tab-content"   class="wmts-adaptor-tab-content">
+	
+			<div class="get-by-click-join-container" data-dojo-attach-point="mission-by-click-join">
+				<input id="get-by-click-join" type="checkbox" data-dojo-attach-point="get-by-click-join">
+				<label for="get-by-click-join">select an item to display tiles</label>
+	
+			</div>
+	
+			<div data-dojo-attach-point="related-missions"></div>
 		</div>
 	</div>
-	<div data-dojo-attach-point="click-tab-content"   class="wmts-adaptor-tab-content">
 
-		<div class="get-by-click-join-container" data-dojo-attach-point="mission-by-click-join">
-			<input id="get-by-click-join" type="checkbox" data-dojo-attach-point="get-by-click-join">
-			<label for="get-by-click-join">select an item to display tiles</label>
-
-		</div>
-
-		<div data-dojo-attach-point="related-missions"></div>
-	</div>
+	
 
 
 
