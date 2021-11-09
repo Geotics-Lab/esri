@@ -94,3 +94,7 @@ margin-top: 0;
   cursor: pointer;
   color: white;background-color: teal;
 }
+.wmts-adaptor .related-row.active{
+  cursor: pointer;
+  color: white;background-color: teal;
+}
