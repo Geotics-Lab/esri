@@ -62,7 +62,7 @@ define(["dojo/_base/declare",
 					self.blocDescription = description
 					self.addBlocs(self.blocDescription)
 				})
- 
+
 				this["mission-selector"].onchange = function (e) {
 
 					self.selectedIndex = this.value
@@ -110,7 +110,7 @@ define(["dojo/_base/declare",
 			},
 
 
-			tryToEnableClickLayer : function () {
+			tryToEnableClickLayer: function () {
 
 				var self = this
 
@@ -123,14 +123,14 @@ define(["dojo/_base/declare",
 						layer.on("click", function (e) {
 							if (self["get-by-click"].checked == true) {
 
-								
+
 								self.config.clickLayer.forEach(element => {
 									if (element.layerId == e.graphic._layer.id) {
 
-										
+
 
 										var url = e.graphic.attributes[element.orthoField]
-										
+
 										self.clearTiledLayer()
 										var tilesUrl = url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
 
@@ -143,7 +143,7 @@ define(["dojo/_base/declare",
 								});
 
 							}
-							
+
 						})
 					});
 
@@ -152,15 +152,15 @@ define(["dojo/_base/declare",
 						if (self["get-by-click"].checked == true) {
 
 							//document.getElementById("map").style.cursor = "crosshair"
-	
+
 						}
 						else {
 							//document.getElementById("map").style.cursor = "none"
 						}
-						
+
 					}
 
-					
+
 
 
 
@@ -170,7 +170,7 @@ define(["dojo/_base/declare",
 				}
 			},
 
-			tryToEnableClickJoinLayer : function () {
+			tryToEnableClickJoinLayer: function () {
 
 				var self = this
 				if (this.config.clickJoinLayer.length > 0) {
@@ -182,28 +182,29 @@ define(["dojo/_base/declare",
 						layer.on("click", function (e) {
 							if (self["get-by-click-join"].checked == true) {
 
-								
+
 								self.config.clickJoinLayer.forEach(element => {
 									if (element.layerId == e.graphic._layer.id) {
 
-										
+
 
 										var joinValue = e.graphic.attributes[element.joinField]
-										
-										self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function(result) {
+
+										self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function (result) {
 											console.log(result)
+											var features = result.features
 										})
 									}
 								});
 
 							}
-							
+
 						})
 					});
 
-				
 
-					
+
+
 
 
 
@@ -400,20 +401,22 @@ define(["dojo/_base/declare",
 				var self = this
 				return new Promise((resolve, reject) => {
 
-				featureLayer = new FeatureLayer(url)
+					featureLayer = new FeatureLayer(url)
 
-				query = new Query();
+					query = new Query();
 
 
-				query.outFields = ["*"];
-				query.where = field + "='" + value + "'"
+					query.outFields = ["*"];
+					query.where = field + "='" + value + "'"
 
-				featureLayer.queryFeatures(query, function (result) {
-					resolve(result)
-					
+					console.log(query.where)
 
-				});
-			})
+					featureLayer.queryFeatures(query, function (result) {
+						resolve(result)
+
+
+					});
+				})
 			},
 
 			clearTiledLayer: function () {
