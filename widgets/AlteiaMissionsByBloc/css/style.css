@@ -138,3 +138,7 @@ margin-top: 0;
   border-radius: 0px 0px 5px 5px;
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
 }
+
+.wmts-adaptor .ico{
+  height: 20px;vertical-align: middle;
+}
