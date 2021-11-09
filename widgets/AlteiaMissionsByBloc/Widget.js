@@ -114,7 +114,7 @@ define(["dojo/_base/declare",
 						element.classList.remove('active')
 					}
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab-content").length; index++) {
-						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						const element = document.getElementsByClassName("wmts-adaptor-tab-content")[index];
 						element.classList.remove('active')
 					}
 					this.classList.add('active')
