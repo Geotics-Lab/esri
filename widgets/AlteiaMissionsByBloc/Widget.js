@@ -124,10 +124,12 @@ define(["dojo/_base/declare",
 					self["get-by-click-join"].checked = true
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						console.log(element)
 						element.classList.remove('active')
 					}
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab-content").length; index++) {
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
+						console.log(element)
 						element.classList.remove('active')
 					}
 					this.classList.add('active')
