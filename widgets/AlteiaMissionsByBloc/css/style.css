@@ -109,6 +109,10 @@ margin-top: 0;
 
 .wmts-adaptor .wmts-adaptor-tab{
   border: solid 1px;
+  border-bottom: none !important;
+  padding: 3px;
+  margin-right: 5px;
+  margin-left: 2px;
 }
 .wmts-adaptor .wmts-adaptor-tab.active{
   border-top: solid 1px teal;
