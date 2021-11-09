@@ -193,6 +193,8 @@ define(["dojo/_base/declare",
 										self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function (result) {
 											console.log(result)
 											var features = result.features
+											var uniqueMission = self.getUniqueMissions(features, element)
+											console.log(uniqueMission)
 										})
 									}
 								});
@@ -214,7 +216,28 @@ define(["dojo/_base/declare",
 				}
 			},
 
+			getUniqueMissions: function (features, settings) {
 
+				var missionList = []
+				var uniqueMissions = []
+
+				features.forEach(element => {
+					missionUrl = element.attributes[element.missionUrl]
+					missionName = element.attributes[element.missionName]
+					missionDate = element.attributes[element.missionDate]
+
+					if (missionList.includes(missionName)==false) {
+						missionList.push(missionName)
+						uniqueMissions.push({
+							url : missionUrl,
+							name : missionName,
+							date : missionDate
+						})
+					}
+				});
+
+				return uniqueMissions
+			},
 
 			addBlocs: function (description) {
 
