@@ -194,6 +194,8 @@ define(["dojo/_base/declare",
 											console.log(result)
 											var features = result.features
 											var uniqueMission = self.getUniqueMissions(features, element)
+											self.buildMissionList(uniqueMission)
+
 											console.log(uniqueMission)
 										})
 									}
@@ -222,21 +224,50 @@ define(["dojo/_base/declare",
 				var uniqueMissions = []
 
 				features.forEach(element => {
-					missionUrl = element.attributes[element.missionUrl]
-					missionName = element.attributes[element.missionName]
-					missionDate = element.attributes[element.missionDate]
+					missionUrl = element.attributes[settings.missionUrl]
+					missionName = element.attributes[settings.missionName]
+					missionDate = element.attributes[settings.missionDate]
 
-					if (missionList.includes(missionName)==false) {
+					if (missionList.includes(missionName) == false) {
 						missionList.push(missionName)
 						uniqueMissions.push({
-							url : missionUrl,
-							name : missionName,
-							date : missionDate
+							url: missionUrl,
+							name: missionName,
+							date: missionDate
 						})
 					}
 				});
 
 				return uniqueMissions
+			},
+
+			buildMissionList: function (list) {
+
+				this['related-missions'].innerHTML = ""
+
+				var self = this
+
+				list.forEach(element => {
+
+					var uiRow = document.createElement('div')
+					uiRow.innerHTML = element.name
+					uiRow.setAttribute('url', element.url)
+
+					uiRow.onclick = function name(params) {
+						var url = this.getAttribute('url')
+						self.clearTiledLayer()
+						var tilesUrl = url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+
+						self.webTiledLayer = new WebTiledLayer(tilesUrl, {
+							"copyright": '',
+							"id": "Alteia Orthomosaic"
+						});
+						self.map.addLayer(self.webTiledLayer);
+					}
+
+					this['related-missions'].appendChild(uiRow)
+				});
+
 			},
 
 			addBlocs: function (description) {
