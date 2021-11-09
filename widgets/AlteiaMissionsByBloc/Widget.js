@@ -117,7 +117,7 @@ define(["dojo/_base/declare",
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
 						element.classList.remove('active')
 					}
-					self.classList.add('active')
+					this.classList.add('active')
 					self['block-tab-content'].add('active')
 				}
 				this['click-tab'].onclick = function name(params) {
@@ -129,7 +129,7 @@ define(["dojo/_base/declare",
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
 						element.classList.remove('active')
 					}
-					self.classList.add('active')
+					this.classList.add('active')
 					self['click-tab-content'].add('active')
 				}
 
