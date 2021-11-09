@@ -140,5 +140,9 @@ margin-top: 0;
 }
 
 .wmts-adaptor .ico{
-  height: 20px;vertical-align: middle;
+  height: 20px;
+vertical-align: middle;
+margin-right: 5px;
+border-right: solid 1px rgba(0,0,0,0.5);
+padding-right: 5px;
 }
