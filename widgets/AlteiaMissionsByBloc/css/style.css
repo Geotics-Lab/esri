@@ -139,9 +139,9 @@ margin-top: 0;
   height: calc(100% - 30px);
   border-radius: 0px 0px 5px 5px;
 	box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.2);
-  display: flex;
+/*   display: flex;
 flex-direction: column;
-justify-content: center;
+justify-content: center; */
 text-align: center;
 }
 
