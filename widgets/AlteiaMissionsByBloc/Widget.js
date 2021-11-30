@@ -224,6 +224,7 @@ define(["dojo/_base/declare",
 									query.returnGeometry = false;
 									query.outFields = ["*"];
 									query.geometry = e.mapPoint;
+									query.where = "1=1";
 
 									queryTask.execute(query, function (featureSet) {
 										console.log(featureSet)
