@@ -107,7 +107,7 @@ define(["dojo/_base/declare",
 				}
 
 				this['block-tab'].onclick = function name(params) {
-					
+
 					self["get-by-click-join"].checked = false
 					for (let index = 0; index < document.getElementsByClassName("wmts-adaptor-tab").length; index++) {
 						const element = document.getElementsByClassName("wmts-adaptor-tab")[index];
@@ -204,10 +204,38 @@ define(["dojo/_base/declare",
 
 				var self = this
 
-				this.map.on("click", function (e) {
-					console.log(e)
-				})
+
 				if (this.config.clickJoinLayer.length > 0) {
+
+					this.map.on("click", function (e) {
+
+						console.log(e)
+
+						self.config.clickJoinLayer.forEach(layerInfo => {
+
+							if (layerInfo.layerId.endsWith('MapServer')) {
+								console.log("endsWith mapserver")
+
+								if (self["get-by-click-join"].checked == true) {
+
+
+
+									query = new Query();
+									queryTask = new QueryTask(layerInfo.layerId);
+		
+									query.returnGeometry = false;
+									query.outFields = "*";
+									query.geometry = e.mapPoint;
+		
+									queryTask.execute(query, function (result) {
+										console.log(result)
+									});
+								}
+							}
+
+						})
+						
+					})
 
 
 					this.config.clickJoinLayer.forEach(layerInfo => {
@@ -299,9 +327,9 @@ define(["dojo/_base/declare",
 							"id": "Alteia Orthomosaic"
 						});
 						self.map.addLayer(self.webTiledLayer);
-						
 
-						
+
+
 						for (let index = 0; index < document.getElementsByClassName('related-row').length; index++) {
 							const element = document.getElementsByClassName('related-row')[index];
 							element.classList.remove("active")
