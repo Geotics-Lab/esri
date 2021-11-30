@@ -225,10 +225,10 @@ define(["dojo/_base/declare",
 									query.outFields = ["*"];
 									query.geometry = e.mapPoint;
 
-									queryTask.execute(query, function (result) {
-										console.log(result)
+									queryTask.execute(query, function (featureSet) {
+										console.log(featureSet)
 
-										var joinValue = result[0].attributes[layerInfo.joinField]
+										var joinValue = featureSet.features[0].attributes[layerInfo.joinField]
 
 										self.getJoinnedFeature(layerInfo.joinLayerUrl, layerInfo.joinField, joinValue).then(function (result) {
 											console.log(result)
