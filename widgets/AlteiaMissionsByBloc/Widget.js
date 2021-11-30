@@ -213,7 +213,7 @@ define(["dojo/_base/declare",
 
 						self.config.clickJoinLayer.forEach(layerInfo => {
 
-							if (layerInfo.layerId.endsWith('MapServer')) {
+							if (layerInfo.layerId.endsWith('MapServer/0')) {
 								console.log("endsWith mapserver")
 
 								if (self["get-by-click-join"].checked == true) {
