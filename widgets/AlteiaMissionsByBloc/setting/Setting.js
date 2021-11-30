@@ -81,6 +81,15 @@ define(["dojo/_base/declare",
           console.log(self.config)
         }
 
+        this["config-click"].onchange = function (params) {
+          self.config.clickLayer = JSON.parse(self["config-click"].value)
+          console.log(self.config)
+        }
+
+        this["config-join-click"].onchange = function (params) {
+          self.config.clickJoinLayer = JSON.parse(self["config-join-click"].value)
+          console.log(self.config)
+        }
 
 
 
@@ -210,9 +219,17 @@ define(["dojo/_base/declare",
 
             if (element.id == e.target.value) {
 
-              var fields = element.layerObject._fields
-              console.log(element.layerObject._fields.target)
-              console.log(element.layerObject._fields)
+              console.log(element.layerObject)
+
+              if (element.layerObject.fields) {
+                var fields = element.layerObject.fields
+              }
+              else{
+                var fields = element.layerObject._fields
+              }
+              
+              console.log(fields.target)
+              console.log(fields)
 
               for (const key in fields) {
                 const field = fields[key];
