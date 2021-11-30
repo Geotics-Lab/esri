@@ -222,7 +222,7 @@ define(["dojo/_base/declare",
 									queryTask = new QueryTask(layerInfo.layerId);
 
 									query.returnGeometry = false;
-									query.outFields = "*";
+									query.outFields = ["*"];
 									query.geometry = e.mapPoint;
 
 									queryTask.execute(query, function (result) {
