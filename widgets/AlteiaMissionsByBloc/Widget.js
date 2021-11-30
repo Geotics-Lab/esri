@@ -203,6 +203,10 @@ define(["dojo/_base/declare",
 			tryToEnableClickJoinLayer: function () {
 
 				var self = this
+
+				this.map.on("click", function (e) {
+					console.log(e)
+				})
 				if (this.config.clickJoinLayer.length > 0) {
 
 
@@ -211,6 +215,7 @@ define(["dojo/_base/declare",
 
 						layer.on("click", function (e) {
 							if (self["get-by-click-join"].checked == true) {
+								console.log(e)
 
 
 								self.config.clickJoinLayer.forEach(element => {
