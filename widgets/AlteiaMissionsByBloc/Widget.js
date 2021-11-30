@@ -218,55 +218,66 @@ define(["dojo/_base/declare",
 
 								if (self["get-by-click-join"].checked == true) {
 
-
-
 									query = new Query();
 									queryTask = new QueryTask(layerInfo.layerId);
-		
+
 									query.returnGeometry = false;
 									query.outFields = "*";
 									query.geometry = e.mapPoint;
-		
+
 									queryTask.execute(query, function (result) {
 										console.log(result)
+
+										var joinValue = result[0].attributes[layerInfo.joinField]
+
+										self.getJoinnedFeature(layerInfo.joinLayerUrl, layerInfo.joinField, joinValue).then(function (result) {
+											console.log(result)
+											var features = result.features
+											var uniqueMission = self.getUniqueMissions(features, layerInfo)
+											self.buildMissionList(uniqueMission)
+
+											console.log(uniqueMission)
+										})
 									});
 								}
 							}
 
 						})
-						
+
 					})
 
 
 					this.config.clickJoinLayer.forEach(layerInfo => {
-						var layer = self.map.getLayer(layerInfo.layerId)
+						if (layerInfo.layerId.endsWith('MapServer') == false) {
+							var layer = self.map.getLayer(layerInfo.layerId)
 
-						layer.on("click", function (e) {
-							if (self["get-by-click-join"].checked == true) {
-								console.log(e)
-
-
-								self.config.clickJoinLayer.forEach(element => {
-									if (element.layerId == e.graphic._layer.id) {
+							layer.on("click", function (e) {
+								if (self["get-by-click-join"].checked == true) {
+									console.log(e)
 
 
+									self.config.clickJoinLayer.forEach(element => {
+										if (element.layerId == e.graphic._layer.id) {
 
-										var joinValue = e.graphic.attributes[element.joinField]
 
-										self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function (result) {
-											console.log(result)
-											var features = result.features
-											var uniqueMission = self.getUniqueMissions(features, element)
-											self.buildMissionList(uniqueMission)
 
-											console.log(uniqueMission)
-										})
-									}
-								});
+											var joinValue = e.graphic.attributes[element.joinField]
 
-							}
+											self.getJoinnedFeature(element.joinLayerUrl, element.joinField, joinValue).then(function (result) {
+												console.log(result)
+												var features = result.features
+												var uniqueMission = self.getUniqueMissions(features, element)
+												self.buildMissionList(uniqueMission)
 
-						})
+												console.log(uniqueMission)
+											})
+										}
+									});
+
+								}
+
+							})
+						}
 					});
 
 
