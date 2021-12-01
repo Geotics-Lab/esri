@@ -22,11 +22,15 @@ define(["dojo/_base/declare",
 	"esri/SpatialReference",
 	"esri/tasks/QueryTask",
 	"esri/tasks/query",
+	"esri/tasks/GeometryService",
+	"esri/tasks/BufferParameters",
 	"jimu/BaseWidget",
 	"dijit/_WidgetsInTemplateMixin",
 	"dojo/_base/array"
 ],
-	function (declare, lang, on, WebTiledLayer, FeatureLayer, Extent, SpatialReference, QueryTask, Query, BaseWidget, _WidgetsInTemplateMixin, array) {
+	function (declare, lang, on, WebTiledLayer, FeatureLayer, Extent, SpatialReference, QueryTask, Query, GeometryService,
+
+		BufferParameters, BaseWidget, _WidgetsInTemplateMixin, array) {
 		return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
 			name: "AddData",
@@ -213,33 +217,50 @@ define(["dojo/_base/declare",
 
 						self.config.clickJoinLayer.forEach(layerInfo => {
 
-							if (layerInfo.layerId.endsWith('MapServer/0')) {
+							if (layerInfo.layerId.includes('MapServer')) {
 								console.log("endsWith mapserver")
 
 								if (self["get-by-click-join"].checked == true) {
 
-									query = new Query();
-									queryTask = new QueryTask(layerInfo.layerId);
+									gs = new GeometryService(self.config.geometryService);
 
-									query.returnGeometry = false;
-									query.outFields = ["*"];
-									query.geometry = e.mapPoint;
-									query.where = "1=1";
+									var params = new BufferParameters();
 
-									queryTask.execute(query, function (featureSet) {
-										console.log(featureSet)
+									params.distances = [20];
+									params.bufferSpatialReference = self.map.spatialReference;
+									params.outSpatialReference = self.map.spatialReference;
+									params.unit = GeometryService.UNIT_METER
+									params.geometries = [e.mapPoint];
 
-										var joinValue = featureSet.features[0].attributes[layerInfo.joinField]
+									console.log(params);
 
-										self.getJoinnedFeature(layerInfo.joinLayerUrl, layerInfo.joinField, joinValue).then(function (result) {
-											console.log(result)
-											var features = result.features
-											var uniqueMission = self.getUniqueMissions(features, layerInfo)
-											self.buildMissionList(uniqueMission)
+									gs.buffer(params, function (result) {
+										console.log(result)
+										query = new Query();
+										queryTask = new QueryTask(layerInfo.layerId);
 
-											console.log(uniqueMission)
-										})
+										query.returnGeometry = false;
+										query.outFields = ["*"];
+										query.geometry = result[0];
+										query.where = "1=1";
+
+										queryTask.execute(query, function (featureSet) {
+											console.log(featureSet)
+
+											var joinValue = featureSet.features[0].attributes[layerInfo.joinField]
+
+											self.getJoinnedFeature(layerInfo.joinLayerUrl, layerInfo.joinField, joinValue).then(function (result) {
+												console.log(result)
+												var features = result.features
+												var uniqueMission = self.getUniqueMissions(features, layerInfo)
+												self.buildMissionList(uniqueMission)
+
+												console.log(uniqueMission)
+											})
+										});
 									});
+
+
 								}
 							}
 
@@ -249,7 +270,8 @@ define(["dojo/_base/declare",
 
 
 					this.config.clickJoinLayer.forEach(layerInfo => {
-						if (layerInfo.layerId.endsWith('MapServer/0') == false) {
+						if (layerInfo.layerId.includes('MapServer') == false) {
+							
 							var layer = self.map.getLayer(layerInfo.layerId)
 
 							layer.on("click", function (e) {

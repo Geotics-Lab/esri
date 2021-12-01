@@ -1,4 +1,5 @@
 {
+  "geometryService" : "http://utility.arcgisonline.com/ArcGIS/rest/services/Geometry/GeometryServer",
   "zoomAction" : false,
   "filterAction" : false,
   "layers": [

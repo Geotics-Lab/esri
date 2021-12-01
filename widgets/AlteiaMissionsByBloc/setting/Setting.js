@@ -52,19 +52,49 @@ define(["dojo/_base/declare",
         this.setConfig(this.config);
         var self = this;
 
+        //init config
 
-
-
-
-        if (this.config.filterAction == true) {
-          this["filter-map-setter"].setAttribute('checked', this.config.filterAction)
-        }
-        if (this.config.zoomAction == true) {
-          this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
+        if(!this.config.hasOwnProperty("clickLayer")){
+          this.config.clickLayer = []
         }
 
+        if(!this.config.hasOwnProperty("clickJoinLayer")){
+          this.config.clickJoinLayer = []
+        }
+
+        if(!this.config.hasOwnProperty("geometryService")){
+          this.config.geometryService = ""
+        }
+
+        if(!this.config.hasOwnProperty("zoomAction")){
+          this.config.zoomAction = false
+        }
+
+        if(!this.config.hasOwnProperty("filterAction")){
+          this.config.filterAction = false
+        }
 
 
+        //retrieve config
+
+        if (this.config.filterAction == true) this["filter-map-setter"].setAttribute('checked', this.config.filterAction)
+
+        if (this.config.zoomAction == true) this["zoom-map-setter"].setAttribute('checked', this.config.zoomAction)
+
+        this["geometry-service"].value = this.config.geometryService
+
+        this["config-click"].value = JSON.stringify(this.config.clickLayer, null, "\t")
+
+        this["config-join-click"].value = JSON.stringify(this.config.clickJoinLayer, null, "\t")
+
+        this["config-layer"].value = JSON.stringify(this.config.layers, null, "\t")
+
+        //listen change
+
+        this["geometry-service"].onchange = function (params) {
+          self.config.geometryService = self["geometry-service"].value
+          console.log(self.config)
+        }
 
         this["config-layer"].onchange = function (params) {
           self.config.layers = JSON.parse(self["config-layer"].value)
@@ -91,30 +121,7 @@ define(["dojo/_base/declare",
           console.log(self.config)
         }
 
-
-
-
-
-        
-
-
-        this["config-layer"].value = JSON.stringify(this.config.layers, null, "\t")
-
-
-        this.layerInfos.forEach(element => {
-
-          var optionClickLayer = document.createElement('option')
-
-          optionClickLayer.innerHTML = element.title
-
-          optionClickLayer.value = element.layerObject.url
-      
-
-          this["select-layer-id"].appendChild(optionClickLayer)
-
-
-        });
-
+       
 
         this["select-layer-add"].onclick = function (e) {
 
@@ -179,28 +186,6 @@ define(["dojo/_base/declare",
 
 
 
-
-
-
-        if(!this.config.hasOwnProperty("clickLayer")){
-          this.config.clickLayer = []
-        }
-
-        this["config-click"].value = JSON.stringify(this.config.clickLayer, null, "\t")
-
-        this.layerInfos.forEach(element => {
-
-          var optionClickLayer = document.createElement('option')
-
-          optionClickLayer.innerHTML = element.title
-
-          optionClickLayer.value = element.id
-
-          this["click-layer-id"].appendChild(optionClickLayer)
-
-
-        });
-
         this["click-layer-add"].onclick = function (e) {
 
 
@@ -248,18 +233,40 @@ define(["dojo/_base/declare",
 
         }
 
-
-
-        if(!this.config.hasOwnProperty("clickJoinLayer")){
-          this.config.clickJoinLayer = []
-        }
-
-        this["config-join-click"].value = JSON.stringify(this.config.clickJoinLayer, null, "\t")
-
-
         this["config-join-click"].onchange = function (e) {
           self.config.clickJoinLayer = JSON.parse(self["config-join-click"].value)
         }
+
+
+        // Build interface
+
+        this.layerInfos.forEach(element => {
+
+          var optionClickLayer = document.createElement('option')
+
+          optionClickLayer.innerHTML = element.title
+
+          optionClickLayer.value = element.layerObject.url
+      
+
+          this["select-layer-id"].appendChild(optionClickLayer)
+
+
+        });
+
+        
+        this.layerInfos.forEach(element => {
+
+          var optionClickLayer = document.createElement('option')
+
+          optionClickLayer.innerHTML = element.title
+
+          optionClickLayer.value = element.id
+
+          this["click-layer-id"].appendChild(optionClickLayer)
+
+
+        });
 
       },
 
