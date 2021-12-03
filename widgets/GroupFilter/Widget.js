@@ -737,7 +737,7 @@ function(declare, _WidgetsInTemplateMixin, BaseWidget, dijit, FilterParameters, 
       partsObj.operator = partsObj.fieldObj.shortType + "OperatorIs";
       partsObj.valueObj = {};
       partsObj.valueObj.isValid = true;
-      partsObj.valueObj.type = "unique";
+      partsObj.valueObj.type = (this.useDomain)?"value":"unique";
       if((pGroupLayer.dataType).indexOf("Integer") > -1 || (pGroupLayer.dataType).indexOf("Double") > -1 ||
         (pGroupLayer.dataType).indexOf("Short") > -1) {
         if(this.useDomain) {
