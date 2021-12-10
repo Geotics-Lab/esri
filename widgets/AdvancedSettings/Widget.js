@@ -1,10 +1,11 @@
 
 define(["dojo/_base/declare",
+  'jimu/portalUtils',
   "jimu/BaseWidget",
   "dijit/_WidgetsInTemplateMixin",
   'dojo/on'
 ],
-  function (declare, BaseWidget, _WidgetsInTemplateMixin, on) {
+  function (declare, portalUtils, BaseWidget, _WidgetsInTemplateMixin, on) {
     return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
       name: "AdvencedSettings",
@@ -18,6 +19,10 @@ define(["dojo/_base/declare",
 
         console.log(this)
         var self = this
+
+        this.portal = portalUtils.getPortal(this.appConfig.portalUrl);
+        this.user = this.portal.user
+        console.log(this.user)
 
         this.activeFiltre = {}
 
