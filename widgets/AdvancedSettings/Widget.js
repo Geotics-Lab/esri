@@ -17,12 +17,9 @@ define(["dojo/_base/declare",
 
       startup: function () {
 
-        console.log(this)
         var self = this
 
-        this.portal = portalUtils.getPortal(this.appConfig.portalUrl);
-        this.user = this.portal.user
-        console.log(this.user)
+
 
         this.activeFiltre = {}
 
@@ -42,6 +39,9 @@ define(["dojo/_base/declare",
             case "customCss":
               this.AddCustomCss(parameters)
               break;
+            case "trackUser":
+              this.TrackUser(parameters)
+              break;
 
 
           }
@@ -51,6 +51,43 @@ define(["dojo/_base/declare",
 
 
       },
+
+      TrackUser(TrackingParameters) {
+
+        var self = this
+
+        if (TrackingParameters.enabled == true) {
+
+          this.jobUrl = TrackingParameters.jobUrl
+          this.jobSuffix = "/submitJob?f=json&env%3AoutSR=102100&JSON_input="
+          this.portal = portalUtils.getPortal(this.appConfig.portalUrl);
+          this.user = this.portal.getUser()
+
+          this.user.then(function (user) {
+
+            self.userInfo = {
+              item : self.appConfig.title,
+              fistname: user.firstName,
+              lastname: user.lastName,
+              fullname: user.fullName,
+              username : user.username,
+              email: user.email,
+              region: user.region,
+              groups: self.getGroupList(user.groups),
+              role: user.role,
+              datetime : Date.now()
+            }
+
+            console.log(self.userInfo)
+
+            self._GET(self.jobUrl + self.jobSuffix + encodeURIComponent(JSON.stringify(self.userInfo)))
+          })
+
+        }
+
+
+      },
+
 
 
 
@@ -290,6 +327,16 @@ define(["dojo/_base/declare",
           }
 
         }
+      },
+
+      getGroupList(groups){
+        output = []
+
+        groups.forEach(group => {
+          output.push(group.title)
+        });
+
+        return output
       },
 
 

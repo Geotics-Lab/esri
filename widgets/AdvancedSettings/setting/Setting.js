@@ -67,6 +67,7 @@ define([
         this.enableConfigExport()
         this.enableConfigImport()
         this.enableUiSizeToggle()
+        this.enableUserTracking()
 
         setTimeout(() => {
 
@@ -77,6 +78,46 @@ define([
         }, 2000);
 
 
+
+      },
+
+
+      enableUserTracking(){
+
+        var self = this
+
+        if (!Object.hasOwnProperty.call(this.config, "trackUser")) {
+         
+          this.config.trackUser = {
+            "enabled" : false,
+            "jobUrl" : null
+          }
+
+        }
+
+        if (this.config.trackUser.jobUrl != null) {
+         
+          this['job-url'].value = this.config.trackUser.jobUrl
+
+        }
+        if (this.config.trackUser.enabled == true) {
+         
+          self['tracking-enabled'].checked = true
+
+        }
+
+        this['job-url'].onchange = function (e) {
+
+          self.config.trackUser.jobUrl = self['job-url'].value
+          console.log(self.config)
+
+        }
+        this['tracking-enabled'].onchange = function (e) {
+          console.log(e)
+
+          self.config.trackUser.enabled = e.target.checked
+
+        }
 
       },
 

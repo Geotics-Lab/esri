@@ -1,31 +1,32 @@
+<div data-dojo-attach-point="ui">
+	<div class="setting-header">
+		<button data-dojo-attach-point="toggle-ui-size" class="btn btn-primary" style="margin: 5px;"
+			state="min">maximize ui</button>
+		<button data-dojo-attach-point="export-config" class="btn btn-primary" style="margin: 5px;">Export
+			settings</button>
+		<button class="btn btn-primary" style="margin: 5px;margin: 5px;
+			padding: 3px 8px;"><input type="file" id="import-config" data-dojo-attach-point="import-config"
+				value="Import" />Import settings</button>
 
 
-	<div data-dojo-attach-point="ui" >
-		<div class="setting-header">
-			<button data-dojo-attach-point="toggle-ui-size" class="btn btn-primary" style="margin: 5px;" state="min">maximize ui</button>
-			<button data-dojo-attach-point="export-config" class="btn btn-primary" style="margin: 5px;">Export settings</button>
-			<button  class="btn btn-primary" style="margin: 5px;margin: 5px;
-			padding: 3px 8px;"><input type="file" id="import-config"  data-dojo-attach-point="import-config" value="Import" />Import settings</button>
+	</div>
 
-			
-		</div>
-	
-		<div class="padmarg-adjust">
+	<div class="padmarg-adjust">
 
-			
+
 		<div class="accordion" id="accordion-element">
-	
+
 			<div class="accordion-item">
 				<h2 class="accordion-header" id="headingOne">
-					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-						aria-expanded="true" aria-controls="collapseOne">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse"
+						data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 						Filter layer on visibility toggle
 					</button>
 				</h2>
 				<div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
 					data-bs-parent="#accordion-element">
 					<div class="accordion-body">
-	
+
 						<div data-dojo-attach-point="filter-layer-on-layer-visibility-change">
 							<div class="flex">
 								<select data-dojo-attach-point="visibility-layer-id" class="form-select">
@@ -35,9 +36,9 @@
 									<option>filtered layer</option>
 								</select>
 							</div>
-	
+
 							<div>
-	
+
 								<select data-dojo-attach-point="layer-filter-field" class="form-select">
 									<option>select field</option>
 								</select>
@@ -55,21 +56,22 @@
 										class="form-check-input">
 									<span>Apply filter when toggle on</span>
 								</span>
-	
-								<button data-dojo-attach-point="add-params" class="btn btn-primary"><i class="bi bi-node-plus"></i> add</button>
+
+								<button data-dojo-attach-point="add-params" class="btn btn-primary"><i
+										class="bi bi-node-plus"></i> add</button>
 							</div>
-	
-	
+
+
 							<textarea data-dojo-attach-point="retrieved-params" contenteditable="false"
 								class="form-control"></textarea>
-	
-	
+
+
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
-	
+
 		<div class="accordion-item">
 			<h2 class="accordion-header" id="headingTwo">
 				<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
@@ -80,7 +82,7 @@
 			<div id="collapseTwo" class="accordion-collapse collapse show" aria-labelledby="headingTwo"
 				data-bs-parent="#accordion-element">
 				<div class="accordion-body">
-	
+
 					<div class="input-group">
 						<input type="text" data-dojo-attach-point="custom-script-name" class="form-control"
 							placeholder="script name" aria-label="css name" aria-describedby="basic-addon1">
@@ -99,26 +101,26 @@
 						<button data-dojo-attach-point="remove-script" style="display:none" class="btn btn-danger"><i
 								class="bi bi-trash-fill"></i> remove script</button>
 					</div>
-	
+
 					<textarea data-dojo-attach-point="custom-script-content" class="form-control"></textarea>
-	
+
 					<ul class="list-group" data-dojo-attach-point="script-list">
-	
+
 					</ul>
-	
+
 				</div>
 			</div>
 			<div class="accordion-item">
 				<h2 class="accordion-header" id="headingThree">
-					<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-						aria-expanded="false" aria-controls="collapseThree">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse"
+						data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
 						Custom Css
 					</button>
 				</h2>
 				<div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree"
 					data-bs-parent="#accordion-element">
 					<div class="accordion-body">
-	
+
 						<div class="input-group">
 							<input type="text" data-dojo-attach-point="custom-css-name" class="form-control"
 								placeholder="css name" aria-label="css name" aria-describedby="basic-addon1">
@@ -129,20 +131,39 @@
 							<button data-dojo-attach-point="remove-css" style="display:none" class="btn btn-danger"><i
 									class="bi bi-trash-fill"></i> remove css</button>
 						</div>
-						
+
 						<textarea data-dojo-attach-point="custom-css-content" class="form-control"></textarea>
-	
+
 						<ul class="list-group" data-dojo-attach-point="css-list">
-	
+
 						</ul>
 					</div>
 				</div>
 			</div>
-	
+
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="headingThree">
+					<button class="accordion-button" type="button" data-bs-toggle="collapse"
+						data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+						User Tracking
+					</button>
+				</h2>
+				<div id="collapseThree" class="accordion-collapse collapse show" aria-labelledby="headingThree"
+					data-bs-parent="#accordion-element">
+					<div class="accordion-body">
+						<div>Is Enabled :</div>
+						<input data-dojo-attach-point="tracking-enabled" type="checkbox">
+						<div>Job Url :</div>
+						<input data-dojo-attach-point="job-url" style="width:100%">
+						
+					</div>
+				</div>
+			</div>
+
 		</div>
-		</div>
-	
-	
-	
 	</div>
-	
+
+
+
+</div>
+

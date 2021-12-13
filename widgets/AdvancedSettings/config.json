@@ -1,6 +1,10 @@
 {
   "filterLayerOnLayerVisibilityChange": [],
   "customScript": [],
-  "customCss" : []
+  "customCss" : [],
+  "trackUser" : {
+    "enabled" : false,
+    "jobUrl" : null
+  }
 
 }
