@@ -43,7 +43,7 @@ define(["dojo/_base/declare",
          
           console.log(self.userInfo)
 
-          self._GET(self.jobUrl + self.jobSuffix + encodeURI(JSON.stringify(self.userInfo)))
+          self._GET(self.jobUrl + self.jobSuffix + encodeURIComponent(JSON.stringify(self.userInfo)))
 
         })
 
