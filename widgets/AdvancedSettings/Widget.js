@@ -74,11 +74,11 @@ define(["dojo/_base/declare",
                     portal.queryItems(params).then(function(result) {
                         console.log('success', result);
 
-                        var tilesUrl = result[0].url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+                        var tilesUrl = result.results[0].url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
 
                         webTiledLayer = new WebTiledLayer(tilesUrl, {
                             "copyright": '',
-                            "id": result[0].title
+                            "id": result.results[0].title
                         });
                         self.map.addLayer(self.webTiledLayer);
 
