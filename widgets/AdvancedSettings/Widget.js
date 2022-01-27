@@ -1,11 +1,12 @@
 define(["dojo/_base/declare",
         'jimu/portalUtils',
         "esri/arcgis/Portal",
+        "esri/layers/WebTiledLayer",
         "jimu/BaseWidget",
         "dijit/_WidgetsInTemplateMixin",
         'dojo/on'
     ],
-    function(declare, portalUtils, arcgisPortal, BaseWidget, _WidgetsInTemplateMixin, on) {
+    function(declare, portalUtils, arcgisPortal, WebTiledLayer, BaseWidget, _WidgetsInTemplateMixin, on) {
         return declare([BaseWidget, _WidgetsInTemplateMixin], {
 
             name: "AdvencedSettings",
@@ -57,18 +58,30 @@ define(["dojo/_base/declare",
 
             addCustomPortalWmts(WmtsParameters) {
 
-                var portal = new arcgisPortal.Portal(this.appConfig.portalUrl);
+                var self = this
 
-                console.info(portal)
+                var portal = new arcgisPortal.Portal(this.appConfig.portalUrl);
+                var portalInfo = portalUtils.getPortal(this.appConfig.portalUrl);
+                var token = portalInfo.credential.token
 
 
                 WmtsParameters.forEach(element => {
                     console.log("wmts", element)
                     var params = {
-                        q: 'id:' + element
+                        q: 'id:' + element,
+                        token: token
                     };
                     portal.queryItems(params).then(function(result) {
                         console.log('success', result);
+
+                        var tilesUrl = result[0].url.replace("{z}", "{level}").replace("{x}", "{col}").replace("{y}", "{row}")
+
+                        webTiledLayer = new WebTiledLayer(tilesUrl, {
+                            "copyright": '',
+                            "id": result[0].title
+                        });
+                        self.map.addLayer(self.webTiledLayer);
+
                     });
 
                 });
