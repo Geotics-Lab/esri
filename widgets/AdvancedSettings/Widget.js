@@ -80,7 +80,7 @@ define(["dojo/_base/declare",
                             "copyright": '',
                             "id": result.results[0].title
                         });
-                        self.map.addLayer(self.webTiledLayer);
+                        self.map.addLayer(webTiledLayer);
 
                     });
 
