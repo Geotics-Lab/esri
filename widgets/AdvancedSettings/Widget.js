@@ -100,6 +100,8 @@ define(["dojo/_base/declare",
 
                     this.portal = portalUtils.getPortal(this.appConfig.portalUrl);
                     this.user = this.portal.getUser()
+				
+                    var token = this.portal.credential.token
 
                     this.user.then(function(user) {
 
@@ -117,15 +119,14 @@ define(["dojo/_base/declare",
                         }
 
 
-
                         console.log(self.userInfo)
                         var params = {
                             f: "pjson",
                             JSON_input: encodeURIComponent(JSON.stringify(self.userInfo)),
-                            token: TrackingParameters.token
+                            token: token
                         }
 
-                        self._GET(self.jobUrl + self.jobSuffix + encodeURIComponent(JSON.stringify(self.userInfo)) + "&token=" + TrackingParameters.token)
+                        self._GET(self.jobUrl + self.jobSuffix + encodeURIComponent(JSON.stringify(self.userInfo)) + "&token=" + token)
                             //self._POST(self.jobUrl + self.jobSuffix, JSON.stringify(params))
 
                     })
